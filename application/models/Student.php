@@ -17,7 +17,7 @@ class Student extends CI_Model
 		$userId = $this->session->userdata('user_id');
 		$role = $this->User->getUserRole($userId);
 
-		$sql = "SELECT students.*, students.id AS studentId, courses.id AS courseId, courses.abbrevation AS courseName, campus.name AS campusName, campus.id AS campusId
+		$sql = "SELECT students.*, students.id AS studentId, courses.id AS courseId, courses.name AS courseName, campus.name AS campusName, campus.id AS campusId
 				FROM students
 				LEFT JOIN campus ON campus.id = students.campus_id
 				LEFT JOIN courses ON courses.id = students.course_id

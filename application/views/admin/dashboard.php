@@ -1,14 +1,6 @@
 <main id="main" class="main">
 	<div class="pagetitle">
 		<h1>Dashboard</h1>
-		<nav>
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-				<li class="breadcrumb-item active">Dashboard
-
-				</li>
-			</ol>
-		</nav>
 	</div><!-- End Page Title -->
 
 	<section class="section dashboard">
@@ -72,7 +64,7 @@
 
 
 							<div class="card-body">
-								<h5 class="card-title">Active Government Scholarship</span></h5>
+								<h5 class="card-title">Active Government Scholarships</span></h5>
 
 								<div class="d-flex align-items-center">
 									<div
@@ -92,16 +84,12 @@
 
 					</div>
 
-
-
 					<div class="col-xxl-4 col-xl-12">
 
 						<div class="card info-card customers-card">
 
-
-
 							<div class="card-body">
-								<h5 class="card-title">Active Private Scholarship</span></h5>
+								<h5 class="card-title">Active Private Scholarships</span></h5>
 
 								<div class="d-flex align-items-center">
 									<div
@@ -122,17 +110,11 @@
 					</div><!-- End Customers Card -->
 
 
-
-
-
-
-
-
 					<div class="col-xxl-4 col-xl-12">
 
 						<div class="card info-card customers-card">
 							<div class="card-body">
-								<h5 class="card-title">Government Grantee</span></h5>
+								<h5 class="card-title">Government Grantee(s)</span></h5>
 
 								<div class="d-flex align-items-center">
 									<div
@@ -158,7 +140,7 @@
 
 
 							<div class="card-body">
-								<h5 class="card-title">Private Grantee</span></h5>
+								<h5 class="card-title">Private Grantee(s)</span></h5>
 
 								<div class="d-flex align-items-center">
 									<div

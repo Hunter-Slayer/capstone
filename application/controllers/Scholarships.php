@@ -9,6 +9,7 @@ class Scholarships extends CI_Controller
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['scholarships'] = $this->Scholarship->getScholarships();
+		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar');

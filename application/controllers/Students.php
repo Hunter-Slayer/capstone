@@ -17,6 +17,10 @@ class Students extends CI_Controller
 		$this->load->view('admin/student/index', $data);
 		$this->load->view('partials/footer');
 	}
+	public function is_student_id_exists($student_id) {
+        $query = $this->db->get_where('students', ['student_id' => $student_id]);
+        return $query->num_rows() > 0;
+    }
 
 	public function edit($studentId)
 	{
@@ -105,8 +109,9 @@ class Students extends CI_Controller
 		);
 		$this->Student->insert_student($data);
 
+		$this->session->set_flashdata('success', 'Student data Added successfully.');
 
-		redirect('students');
+		redirect('create');
 	}
 	}
 
@@ -184,6 +189,7 @@ class Students extends CI_Controller
 	{
 		$data['student'] = $this->Student->getStudent($studentId);
 		$data['campus'] = $this->Camp->getActiveCampus();
+		$data['years'] = $this->SchoolYear->getSchoolYear();
 
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);

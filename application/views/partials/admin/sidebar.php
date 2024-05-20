@@ -35,7 +35,7 @@
 			<a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
 				<i class="bi bi-gear-fill"></i><span>System Settings</span><i class="bi bi-chevron-down ms-auto"></i>
 			</a>
-			<ul id="charts-nav" class="nav-content collapse <?= ($this->uri->segment(2) == 'scholarships' || $this->uri->segment(2) == 'campus'  || $this->uri->segment(2) == 'import'  || $this->uri->segment(2) == 'backup' 
+			<ul id="charts-nav" class="nav-content collapse <?= ($this->uri->segment(2) == 'scholarships' || $this->uri->segment(2) == 'campus' || $this->uri->segment(2) == 'backup' 
 		|| $this->uri->segment(2) == 'courses') ? 'show' : '' ?>" data-bs-parent="#sidebar-nav">
 				<li>
 					<a href="<?= base_url('admin/scholarships') ?>"
@@ -53,15 +53,6 @@
 					<a href="<?= base_url('admin/courses') ?>"
 						class="<?= ($this->uri->segment(2) == 'courses') ? 'text-primary' : '' ?>">
 						<i class="bi bi-circle"></i><span>Courses</span>
-					</a>
-				</li>
-
-
-
-				<li>
-					<a href="<?= base_url('admin/import') ?>"
-						class="<?= ($this->uri->segment(2) == 'import') ? 'text-primary' : '' ?>">
-						<i class="bi bi-circle"></i><span>Import </span>
 					</a>
 				</li>
 

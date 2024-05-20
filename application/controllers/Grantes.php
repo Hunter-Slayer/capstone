@@ -22,6 +22,7 @@ class Grantes extends CI_Controller
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getActiveCampus();
+		$data['years'] = $this->SchoolYear->getSchoolYear();
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);

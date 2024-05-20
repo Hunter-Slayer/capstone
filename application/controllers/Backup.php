@@ -40,6 +40,24 @@ class Backup extends CI_Controller
 		// Set headers to force download the backup file
 		$this->load->helper('download');
 		force_download('backup.sql', $sql);
+
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+			// Prepare audit trail data
+			$audit_data = [
+				'user_id' => $user_id,
+				'action' => 'Backed Database',
+				'data' => json_encode(['username' => $username]), // Correctly format the data field
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s')
+			];
+	
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+        }
 	}
 	
 	

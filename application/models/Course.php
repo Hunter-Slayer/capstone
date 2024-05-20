@@ -12,7 +12,7 @@ class Course extends CI_Model {
 				FROM courses 
 				LEFT JOIN campus
 				ON campus.id = courses.campus_id
-				ORDER BY courses.created_at DESC";
+				ORDER BY courses.created_at ASC";
 		
 		$query = $this->db->query($sql);
 		return $query->result_array();
@@ -23,7 +23,7 @@ class Course extends CI_Model {
 		$sql = "SELECT courses.id AS courseId, courses.name, courses.status, courses.campus_id
 				FROM courses 
 				WHERE courses.status = ?
-				ORDER BY courses.created_at DESC";
+				ORDER BY courses.created_at ASC";
 		
 		$query = $this->db->query($sql, array(0));
 		return $query->result_array();

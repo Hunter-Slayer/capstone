@@ -36,6 +36,24 @@ class Campus extends CI_Controller
 
 		$this->Camp->insertCampus($data);
 
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+			// Prepare audit trail data
+			$audit_data = [
+				'user_id' => $user_id,
+				'action' => 'Added Campus',
+				'data' => json_encode(['username' => $username]), // Correctly format the data field
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s')
+			];
+	
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+        }
+
 		// Set flashdata message
 		$this->session->set_flashdata('success', 'Campus Saved Successfully.');
 
@@ -78,6 +96,23 @@ class Campus extends CI_Controller
 		);
 
 		$this->Camp->updateCampus($campusId, $data);
+
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+            // Prepare audit trail data
+            $audit_data = [
+                'user_id' => $user_id,
+                'action' => 'Updated campus',
+                'data' => json_encode(['Updated: ' => $data]),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+        }
 	
 		$this->session->set_flashdata('success', 'Campus Data Updated Successfully.');
 	

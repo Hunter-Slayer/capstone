@@ -32,6 +32,18 @@ class Auth extends CI_Controller
 				$this->session->set_userdata('logged_in', TRUE);
 				$this->session->set_userdata('user_id', $user['id']);
 				$this->session->set_userdata('username', $user['username']);
+
+				// Prepare audit trail data
+				$audit_data = [
+					'user_id' => $user['id'],
+					'action' => 'Logged in',
+					'data' => json_encode(['username' => $user['username']]), // Correctly format the data field
+					'created_at' => date('Y-m-d H:i:s'),
+					'updated_at' => date('Y-m-d H:i:s')
+				];
+
+				// Insert audit trail record
+				$this->Audit->insert_audit_trail($audit_data);
 				// Redirect to a protected area
 				redirect('dashboard');
 			} else {
@@ -46,6 +58,24 @@ class Auth extends CI_Controller
 	// log out
 	public function logout()
 	{
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+			// Prepare audit trail data
+			$audit_data = [
+				'user_id' => $user_id,
+				'action' => 'Logged out',
+				'data' => json_encode(['username' => $username]), // Correctly format the data field
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s')
+			];
+	
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+        }
+		
 		$this->session->sess_destroy();
 		redirect('login');
 	}

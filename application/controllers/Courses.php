@@ -38,6 +38,23 @@ class Courses extends CI_Controller
 			'status' => $this->input->post('status'),
 		);
 
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+            // Prepare audit trail data
+            $audit_data = [
+                'user_id' => $user_id,
+                'action' => 'Added Courses',
+                'data' => json_encode(['Added: ' => $data]),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+        }
+
 		$this->Course->insertCourse($data);
 
 		$this->session->set_flashdata('success', 'Course Saved Successfully.');

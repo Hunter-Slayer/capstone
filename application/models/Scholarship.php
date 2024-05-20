@@ -87,20 +87,29 @@ class Scholarship extends CI_Model {
 
 	// Coungint grantess
 	public function totalGovernmentStudent()
-    {
-        // Custom SQL query to count scholarships where type = 0
-        $query = $this->db->query("SELECT COUNT(*) AS totalGovStudent FROM grantees WHERE status = 0");
-        $result = $query->row();
-        return $result->totalGovStudent;
-    }
+	{
+		$query = $this->db->query("
+			SELECT COUNT(*) AS totalGovStudent
+			FROM grantees g
+			LEFT JOIN scholarship s ON g.scholarship_id = s.id
+			WHERE s.type = 0 AND g.status = 0
+		");
+		$result = $query->row();
+		return $result->totalGovStudent;
+	}
 
 	public function totalPrivateStudent()
-    {
-        // Custom SQL query to count scholarships where type = 0
-        $query = $this->db->query("SELECT COUNT(*) AS totalGovScholar FROM scholarship WHERE status = 1");
-        $result = $query->row();
-        return $result->totalGovScholar;
-    }
+{
+    $query = $this->db->query("
+        SELECT COUNT(*) AS totalGovStudent
+        FROM grantees g
+        LEFT JOIN scholarship s ON g.scholarship_id = s.id
+        WHERE s.type = 1 AND g.status = 0
+    ");
+    $result = $query->row();
+    return $result->totalGovStudent;
+}
+
 
 
 	// Bar Chart

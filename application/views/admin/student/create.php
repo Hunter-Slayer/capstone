@@ -10,13 +10,6 @@
 			</nav>
 		</div>
 	</div>
-	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/students') ?>" class="btn btn-primary">Back</a>
-	</div>
-
-	<div class="alert alert-success" id="message" style="display: none;">
-	</div>
-
 	<div class="card">
 		<div class="card-body">
 
@@ -194,11 +187,24 @@
 
 
 
-		
-				<div class="col-12 d-flex justify-content-end align-items-center">
+				<div class="row mt-4">
+					<div class="col-6 d-flex justify-content-start align-items-start">
+						<button class="btn btn-success btn-md text-black fw-semibold mx-2" type="submit" name="submit">Add
+							Student</button>
+							<a href="<?= base_url('admin/students') ?>" class="btn btn-danger btn-md text-black fw-semibold">Back</a>
+					</div>
+					<div class="col-6">
+						<?php if ($this->session->flashdata('success')) { ?>
+						<div class="alert alert-success" role="alert">
+							<?php echo $this->session->flashdata('success'); ?>
+						</div>
+						<?php } ?>
+					</div>
 
-					<button class="btn btn-primary" type="submit" name="submit">Add Student</button>
 				</div>
+
+
+
 
 
 			</form>

@@ -64,21 +64,21 @@ class User extends CI_Model {
     }
 
 	public function getUserInfo($userId)
-	{
-		$sql = "SELECT users.name AS usersFullName, user_types.name as userTypeName, campus.name as campusName
-		FROM users
-		LEFT JOIN user_types ON users.type_id = user_types.id
-		LEFT JOIN campus ON users.campus_id = campus.id
-		WHERE users.id = ?";
-		
-		$query = $this->db->query($sql, array($userId));
-		
-		if ($query->num_rows() > 0) {
-			return $query->row_array();
-		} else {
-			return null;
-		}
-	}
+{
+    $sql = "SELECT users.id, users.name AS usersFullName, user_types.name as userTypeName, campus.name as campusName, users.type_id
+            FROM users
+            LEFT JOIN user_types ON users.type_id = user_types.id
+            LEFT JOIN campus ON users.campus_id = campus.id
+            WHERE users.id = ?";
+
+    $query = $this->db->query($sql, array($userId));
+
+    if ($query->num_rows() > 0) {
+        return $query->row_array();
+    } else {
+        return null;
+    }
+}
 
 	public function getUserRole($userId)
 	{
