@@ -26,6 +26,6 @@
 <!-- Template Main CSS File -->
 <script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
 <link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet">
-<!-- <link href="<?= base_url('assets/images/updated.png') ?>" rel="rel_icon"> -->
+<link rel="shortcut icon" href="<?= base_url('assets/images/updated.png') ?>" />
 
 </head>

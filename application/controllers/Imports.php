@@ -16,7 +16,7 @@ class Imports extends CI_Controller
 		$data['user'] = $this->User->getUserInfo($userId);
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/import/index');
 		$this->load->view('partials/footer');
 	}
@@ -78,7 +78,7 @@ class Imports extends CI_Controller
 					];
 
 					// Check if student_id is unique
-					if ($this->Student->is_student_id_exists($student_data['student_id'])) {
+					if ($this->Student->is_student_id_exists($data['student_id'])) {
 						$this->session->set_flashdata('fail', 'Duplicate student ID found: ' . $student_data['student_id']);
 						redirect($_SERVER['HTTP_REFERER']);
 					}

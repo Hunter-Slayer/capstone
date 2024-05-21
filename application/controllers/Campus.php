@@ -11,7 +11,7 @@ class Campus extends CI_Controller
 		$data['campus'] = $this->Camp->getCampus();
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/campus/index', $data);
 		$this->load->view('partials/footer');
 	}
@@ -22,7 +22,7 @@ class Campus extends CI_Controller
 		$data['user'] = $this->User->getUserInfo($userId);
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/campus/create');
 		$this->load->view('partials/footer');
 	}
@@ -68,7 +68,7 @@ class Campus extends CI_Controller
 		$data['campus'] = $this->Camp->getSingleCampus($campusId);
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/campus/show', $data);
 		$this->load->view('partials/footer');
 	}
@@ -82,7 +82,7 @@ class Campus extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/campus/edit', $data);
 		$this->load->view('partials/footer');
 	}

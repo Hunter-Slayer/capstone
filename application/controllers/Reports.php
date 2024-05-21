@@ -15,10 +15,11 @@ class Reports extends CI_Controller
 
 		$data['campus'] = $this->Camp->getActiveCampus();
 		$data['courses'] = $this->Course->getActiveCourses();
+		$data['years'] = $this->SchoolYear->getSchoolYear();
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/report/index', $data);
 		$this->load->view('partials/footer');
 	}

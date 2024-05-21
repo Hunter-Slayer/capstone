@@ -12,7 +12,7 @@ class Grantes extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/grantes/index', $data);
 		$this->load->view('partials/footer');
 	}
@@ -26,7 +26,7 @@ class Grantes extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/grantes/create', $data);
 		$this->load->view('partials/footer');
 	}
@@ -57,7 +57,7 @@ class Grantes extends CI_Controller
 		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/grantes/show', $data);
 		$this->load->view('partials/footer');
 	}
@@ -72,7 +72,7 @@ class Grantes extends CI_Controller
 		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/grantes/edit', $data);
 		$this->load->view('partials/footer');
 	}

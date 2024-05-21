@@ -8,15 +8,20 @@ class Course extends CI_Model {
 
 	public function getCourses()
 	{
-		$sql = "SELECT courses.id AS courseId, courses.name, courses.status, courses.campus_id, campus.name as CampusName
+		$userId = $this->session->userdata('user_id');
+		$role = $this->User->getUserRole($userId);
+		
+		$sql = "SELECT courses.id AS courseId, courses.name, courses.status, courses.campus_id, campus.name AS CampusName
 				FROM courses 
 				LEFT JOIN campus
 				ON campus.id = courses.campus_id
+				WHERE courses.campus_id = IF(? = 0, courses.campus_id, ?)
 				ORDER BY courses.created_at ASC";
-		
-		$query = $this->db->query($sql);
+	
+		$query = $this->db->query($sql, array($role, $role));
 		return $query->result_array();
 	}
+	
 
 	public function getActiveCourses()
 	{

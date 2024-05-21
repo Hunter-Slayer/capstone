@@ -12,7 +12,7 @@ class Backup extends CI_Controller
 		$data['user'] = $this->User->getUserInfo($userId);
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/backup/index');
 		$this->load->view('partials/footer');
 	}

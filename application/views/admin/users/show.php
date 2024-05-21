@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/users') ?>" class="btn btn-primary">Back</a>
+		<a href="<?= base_url('admin/users') ?>" class="btn btn-danger">Back</a>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">
@@ -33,19 +33,19 @@
 
 				<div class="col-md-6">
 					<label class="form-label">Name<span class="text-danger">*</span></label>
-					<input class="form-control" type="text" name="name" value="<?= $user['name'] ?>" />
+					<input class="form-control" type="text" name="name" value="<?= $users['name'] ?>" />
 					<span class="text-sm text-danger"><?= form_error('name') ?></span>
 				</div>
 
 				<div class="col-md-6">
 					<label class="form-label">Username<span class="text-danger">*</span></label>
-					<input class="form-control" type="text" name="username" value="<?= $user['username'] ?>" />
+					<input class="form-control" type="text" name="username" value="<?= $users['username'] ?>" />
 					<span class="text-sm text-danger"><?= form_error('username') ?></span>
 				</div>
 
 				<div class="col-md-6">
 					<label class="form-label">Email Address<span class="text-danger">*</span></label>
-					<input class="form-control" type="email" name="email" value="<?= $user['email'] ?>" />
+					<input class="form-control" type="email" name="email" value="<?= $users['email'] ?>" />
 					<span class="text-sm text-danger"><?= form_error('email') ?></span>
 				</div>
 
@@ -53,9 +53,9 @@
 					<label class="form-label">User Type<span class="text-danger">*</span></label>
 
 					<select class="form-select" name="user_type" id="user_type">
-					<option value="" <?= ($user['type_id'] == '') ? 'selected' : '' ?>>Choose from below</option>
+					<option value="" <?= ($users['type_id'] == '') ? 'selected' : '' ?>>Choose from below</option>
 						<?php foreach ($userTypes as $type): ?>
-							<option value="<?= $type['id'] ?>" <?= ($type['id'] == $user['type_id']) ? 'selected' : '' ?>>
+							<option value="<?= $type['id'] ?>" <?= ($type['id'] == $users['type_id']) ? 'selected' : '' ?>>
 								<?= $type['name'] ?>
 							</option>
 						<?php endforeach; ?>
@@ -67,9 +67,9 @@
 				<div class="col-md-6">
 					<label class="form-label">Campus<span class="text-danger">*</span></label>
 					<select  class="form-select" name="campus_id" required id="campus_id">
-						<option value="" <?= ($user['campus_id'] == '') ? 'selected' : '' ?>>Choose from below</option>
+						<option value="" <?= ($users['campus_id'] == '') ? 'selected' : '' ?>>Choose from below</option>
 						<?php foreach ($campus as $camp): ?>
-							<option value="<?= $camp['id'] ?>" <?= ($camp['id'] == $user['campus_id']) ? 'selected' : '' ?>>
+							<option value="<?= $camp['id'] ?>" <?= ($camp['id'] == $users['campus_id']) ? 'selected' : '' ?>>
 								<?= $camp['name'] ?>
 							</option>
 						<?php endforeach; ?>

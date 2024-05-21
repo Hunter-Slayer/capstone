@@ -44,10 +44,16 @@
 					</a>
 				</li>
 				<li>
+
+					<?php if ($user['type_id'] == 1 || $user['type_id'] == 2): ?>
 					<a href="<?= base_url('admin/campus') ?>"
 						class="<?= ($this->uri->segment(2) == 'campus') ? 'text-primary' : '' ?>">
 						<i class="bi bi-circle"></i><span>Campus</span>
 					</a>
+					<?php endif; ?>
+
+
+
 				</li>
 				<li>
 					<a href="<?= base_url('admin/courses') ?>"
@@ -56,16 +62,18 @@
 					</a>
 				</li>
 
+				<?php if ( $user['type_id'] == 2 ): ?>
 				<li>
 					<a href="<?= base_url('admin/backup') ?>"
 						class="<?= ($this->uri->segment(2) == 'backup') ? 'text-primary' : '' ?>">
 						<i class="bi bi-circle"></i><span>Backup</span>
 					</a>
 				</li>
+				<?php endif; ?>
 			</ul>
 		</li>
 
-
+		<?php if ( $user['type_id'] == 2 ): ?>
 		<li class="nav-item">
 			<a class="nav-link collapsed" data-bs-target="#users-nav" data-bs-toggle="collapse" href="#">
 				<i class="bi bi-people-fill"></i>User Settings</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -80,6 +88,7 @@
 				</li>
 			</ul>
 		</li>
+		<?php endif; ?>
 
 		<li class="nav-item">
 			<a class="nav-link<?php echo (current_url() == base_url('admin/report')) ? '' : ' collapsed'; ?>"

@@ -1,0 +1,29 @@
+$this->session->set_userdata('user_id', $user['id']);
+				$this->session->set_userdata('username', $user['username']);
+				$user_role = $this->session->set_userdata('role');
+				$campus_id = $this->session->set_userdata('campus_id');
+
+				// Prepare and insert notification data
+                	if ($user_id) {
+
+					if ($user_role == 1 || $user_role == 0) {
+						$data_field = json_encode([
+							'data' => $user_role,
+						]);
+					} elseif ($user_role == 2) {
+						$data_field = json_encode([
+							'data' => $user_role . ' - ' . $campus_id,
+						]);
+					}	
+					// Prepare audit trail data
+					$notification_data = [
+						'user_id' => $user_id,
+						'action' => 'Added Grantee',
+						'data' => $data_field,
+						'created_at' => date('Y-m-d H:i:s'),
+						'updated_at' => date('Y-m-d H:i:s')
+					];
+
+                $this->Notif->insertNotification($notification_data);
+			}
+		}

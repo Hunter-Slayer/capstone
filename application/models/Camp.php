@@ -10,10 +10,11 @@ class Camp extends CI_Model {
 	{
 		$userId = $this->session->userdata('user_id');
 		$role = $this->User->getUserRole($userId);
+
 		$sql = "SELECT campus.id, campus.name, campus.description, campus.status
 				FROM campus
 				WHERE campus.id = IF(? = 0, campus.id, ?)
-				ORDER BY campus.created_at DESC";
+				ORDER BY campus.created_at ASC";
 	
 		$query = $this->db->query($sql, array($role, $role));
 		return $query->result_array();

@@ -12,6 +12,12 @@ class Grant extends CI_Model {
     }
 	public function getGrantees() 
 	{
+
+		$userId = $this->session->userdata('user_id');
+		$role = $this->User->getUserRole($userId);
+		// Assuming that the campus_id for the current user is stored in a session variable or can be retrieved from the database
+		$campusId = $this->session->userdata('campus_id');
+
 		$sql = "SELECT grantees.id AS granteeId, 
 					   CONCAT(students.first_name, ' ', students.last_name) AS fullName,
 					   grantees.*, 
@@ -25,9 +31,10 @@ class Grant extends CI_Model {
 				LEFT JOIN students ON students.id = grantees.student_id
 				LEFT JOIN scholarship ON scholarship.id = grantees.scholarship_id
 				LEFT JOIN campus ON campus.id = students.campus_id
-				ORDER BY grantees.created_at DESC";
+				WHERE students.campus_id = ? OR ? = 0
+				ORDER BY grantees.created_at ASC";
 		
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, array($role,$role));
 		return $query->result_array();
 	}
 	

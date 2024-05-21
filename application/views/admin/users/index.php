@@ -41,22 +41,22 @@
 								</thead>
 
 								<tbody>
-								<?php foreach ($users as $user): ?>
-										<tr>
-											<td><?= $user['nameUser'] ?></td>
-											<td><?= $user['username'] ?></td>
-											<td><?= $user['email'] ?></td>
-											<td><?= $user['userTypeName'] ?></td>
-											<td><?= $user['campus_id'] ?></td>
-											<td>
-												<a href="<?= site_url('admin/users/view/' . $user['userId']) ?>"
-													class="btn-primary btn btn-sm">View</a>
-												<a href="<?= site_url('admin/users/edit/' . $user['userId']) ?>"
-													class="btn-primary btn btn-sm">Edit</a>
-
-											</td>
-										</tr>
+									<?php foreach ($users as $user): ?>
+									<tr>
+										<td><?= htmlspecialchars($user['nameUser'] ?? '') ?></td>
+										<td><?= htmlspecialchars($user['username'] ?? '') ?></td>
+										<td><?= htmlspecialchars($user['email'] ?? '') ?></td>
+										<td><?= htmlspecialchars($user['userTypeName'] ?? '') ?></td>
+										<td><?= htmlspecialchars($user['campusName'] ?? 'All Campus') ?></td>
+										<td>
+											<a href="<?= base_url('admin/users/view/' . $user['userId']) ?>"
+												class="btn-primary btn btn-sm">View</a>
+											<a href="<?= base_url('admin/users/edit/' . $user['userId']) ?>"
+												class="btn-primary btn btn-sm">Edit</a>
+										</td>
+									</tr>
 									<?php endforeach; ?>
+
 								</tbody>
 
 

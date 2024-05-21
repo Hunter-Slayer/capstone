@@ -9,10 +9,15 @@ class Scholarships extends CI_Controller
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['scholarships'] = $this->Scholarship->getScholarships();
+
+		// filter
+		$data['totalGovScholar'] = $this->Scholarship->totalGovernmentScholarships(0);
+		$data['totalPrivateScholar'] = $this->Scholarship->totalPrivateScholarships(1);
+
 		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/scholar/index', $data);
 		$this->load->view('partials/footer');
 	}
@@ -23,7 +28,7 @@ class Scholarships extends CI_Controller
 		$data['user'] = $this->User->getUserInfo($userId);
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/scholar/create');
 		$this->load->view('partials/footer');
 	}
@@ -38,11 +43,28 @@ class Scholarships extends CI_Controller
 
 		$this->Scholarship->insertScholarship($data);
 
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+            // Prepare audit trail data
+            $audit_data = [
+                'user_id' => $user_id,
+                'action' => 'Added Scholarship',
+                'data' => json_encode(['Added: ' => $data['name']]),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+
 		// Set flashdata message
 		$this->session->set_flashdata('success', 'Scholarship saved successfully.');
 
 		redirect($_SERVER['HTTP_REFERER']);
 	}
+}
 
 
 	public function show($scholarId)
@@ -53,7 +75,7 @@ class Scholarships extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/scholar/show', $data);
 		$this->load->view('partials/footer');
 	}
@@ -65,7 +87,7 @@ class Scholarships extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/scholar/edit', $data);
 		$this->load->view('partials/footer');
 	}
@@ -80,11 +102,28 @@ class Scholarships extends CI_Controller
 		);
 
 		$this->Scholarship->updateScholar($scholarId, $data);
+
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+            // Prepare audit trail data
+            $audit_data = [
+                'user_id' => $user_id,
+                'action' => 'Updated Scolarship',
+                'data' => json_encode(['Updated: ' => $data]),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
 	
-		$this->session->set_flashdata('success', 'Scholar data updated successfully.');
-	
-		redirect($_SERVER['HTTP_REFERER']);
+			$this->session->set_flashdata('success', 'Scholar data updated successfully.');
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 
 	}
 
 }
+

@@ -27,6 +27,15 @@ class Student extends CI_Model
 		return $query->result_array();
 	}
 	
+	// In your Student model (Student.php), add the following method:
+
+	public function is_student_id_exists($student_id) {
+	
+		// Check if the student ID exists in the database
+		$query = $this->db->get_where('students', array('student_id' => $student_id));
+		return $query->num_rows() > 0;
+	}
+
 
 
 	public function getStudent($studentId)

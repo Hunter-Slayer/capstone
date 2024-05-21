@@ -24,7 +24,7 @@ class Dashboard extends CI_Controller {
 		$data['totalPrivateStudent'] = $this->Scholarship->totalPrivateStudent();
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/dashboard', $data);
 		$this->load->view('partials/footer');
 	}
@@ -47,14 +47,26 @@ class Dashboard extends CI_Controller {
 	}
 	
 
-	public function navbar()
+	public function getStudents()
 	{
-		$userId = $this->session->userdata('user_id');
+		// Get the current user's campus
+		$userCampus = $this->session->userdata('campus'); // Assuming you store the user's campus in the session
 
-		$data['user'] = $this->User->getUserInfo($userId);
+		$selectedScholarshipType = $this->input->get('type1');
+		$selectedYear = $this->input->get('selectedYear');
 
-		$this->load->view('partials/admin/navbar', $data);
+		// Retrieve students count for the user's campus
+		$this->db->select('campuses.campus_name as label, COUNT(*) as data');
+		$this->db->from('grantees');
+		$this->db->join('students', 'grantees.student_id = students.id');
+		$this->db->join('campuses', 'students.campus_id = campuses.id');
+		$this->db->where('grantees.scholarship_type', $selectedScholarshipType);
+		$this->db->where('grantees.school_year', $selectedYear);
+		$this->db->where('students.campus_id', $userCampus); // Filter by the user's campus
+		$this->db->group_by('campuses.campus_name');
+		$studentsCount = $this->db->get()->result_array();
 
+		echo json_encode($studentsCount);
 	}
 
 

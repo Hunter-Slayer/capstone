@@ -55,7 +55,7 @@
 						<label class="form-label">Middle Name<span class="text-red"></span><span
 								class="text-danger">*</span></label>
 						<div class="input-group">
-							<input class="form-control" type="text" required name="middle_name" />
+							<input class="form-control" type="text" name="middle_name" />
 						</div>
 					</div>
 

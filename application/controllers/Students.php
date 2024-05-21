@@ -13,7 +13,7 @@ class Students extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/student/index', $data);
 		$this->load->view('partials/footer');
 	}
@@ -36,7 +36,7 @@ class Students extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/student/edit', $data);
 		$this->load->view('partials/footer');
 	}
@@ -54,7 +54,7 @@ class Students extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/student/create', $data);
 		$this->load->view('partials/footer');
 	}
@@ -73,7 +73,7 @@ class Students extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/student/show', $data);
 		$this->load->view('partials/footer');
 	}
@@ -107,12 +107,30 @@ class Students extends CI_Controller
 			'father_name' => $this->input->post('father_name'),
 			'mother_name' => $this->input->post('mother_name'),
 		);
+	
 		$this->Student->insert_student($data);
+
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+            // Prepare audit trail data
+            $audit_data = [
+                'user_id' => $user_id,
+                'action' => 'Added Student',
+                'data' => json_encode(['Added '. $data['last_name']. ', '. $data['first_name']]),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
 
 		$this->session->set_flashdata('success', 'Student data Added successfully.');
 
-		redirect('create');
-	}
+		redirect('students');
+		}
+		}
 	}
 
 
@@ -136,14 +154,32 @@ class Students extends CI_Controller
 			'father_name' => $this->input->post('father_name'),
 			'mother_name' => $this->input->post('mother_name'),
 		);
-
+	
 		$this->Student->updateStudent($studentId, $data);
-
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+	
+		if ($user_id) {
+			// Prepare audit trail data
+			$audit_data = [
+				'user_id' => $user_id,
+				'action' => 'Updated Student',
+				'data' => json_encode(['Updated: '. $data]),
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s')
+			];
+	
+			// Insert audit trail record
+			$this->Audit->insert_audit_trail($audit_data);
+	
 		$this->session->set_flashdata('success', 'Student data updated successfully.');
-
+	
 		redirect('admin/student/edit/' . $studentId, 'refresh');
-
+	
 	}
+}
+
+	
 	public function address($data)
 	{
 		$data['provinces'] = $this->Address->getProvince();
@@ -196,7 +232,7 @@ class Students extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/student/grantee', $data);
 		$this->load->view('partials/footer');
 	}
@@ -223,6 +259,7 @@ class Students extends CI_Controller
 			// Insert the first set of data into the grantees table
 			if ($this->Grant->insertGrantee($data1)) {
 				$inserted = true;
+				
 			}
 		}
 	
@@ -283,3 +320,5 @@ class Students extends CI_Controller
 
 
 }
+
+

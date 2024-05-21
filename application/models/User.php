@@ -5,12 +5,14 @@ class User extends CI_Model {
 	{
 		$this->load->database();
 	}
+	
 	public function getUsers()
 	{
-		$sql = "SELECT users.*, users.id AS userId, users.name As nameUser, user_types.name AS userTypeName
+		$sql = "SELECT users.*, users.id AS userId, users.name AS nameUser, user_types.name AS userTypeName, campus.name AS campusName
 				FROM users
 				LEFT JOIN user_types ON users.type_id = user_types.id
-				ORDER BY users.created_at DESC";
+				LEFT JOIN campus ON users.campus_id = campus.id
+				ORDER BY users.created_at ASC";
 	
 		$query = $this->db->query($sql);
 		return $query->result_array();
@@ -64,21 +66,21 @@ class User extends CI_Model {
     }
 
 	public function getUserInfo($userId)
-{
-    $sql = "SELECT users.id, users.name AS usersFullName, user_types.name as userTypeName, campus.name as campusName, users.type_id
-            FROM users
-            LEFT JOIN user_types ON users.type_id = user_types.id
-            LEFT JOIN campus ON users.campus_id = campus.id
-            WHERE users.id = ?";
+	{
+		$sql = "SELECT users.id, users.name AS usersFullName, user_types.name as userTypeName, campus.name as campusName, users.type_id
+				FROM users
+				LEFT JOIN user_types ON users.type_id = user_types.id
+				LEFT JOIN campus ON users.campus_id = campus.id
+				WHERE users.id = ?";
 
-    $query = $this->db->query($sql, array($userId));
+		$query = $this->db->query($sql, array($userId));
 
-    if ($query->num_rows() > 0) {
-        return $query->row_array();
-    } else {
-        return null;
-    }
-}
+		if ($query->num_rows() > 0) {
+			return $query->row_array();
+		} else {
+			return null;
+		}
+	}
 
 	public function getUserRole($userId)
 	{

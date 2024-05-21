@@ -9,9 +9,10 @@ class Courses extends CI_Controller
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['courses'] = $this->Course->getCourses();
+		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/courses/index', $data);
 		$this->load->view('partials/footer');
 	}
@@ -24,7 +25,7 @@ class Courses extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/courses/create', $data);
 		$this->load->view('partials/footer');
 	}
@@ -69,9 +70,10 @@ class Courses extends CI_Controller
 		$data['course'] = $this->Course->getCourse($courseId);
 		$data['campus'] = $this->Camp->getActiveCampus();
 
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/courses/show', $data);
 		$this->load->view('partials/footer');
 	}
@@ -85,7 +87,7 @@ class Courses extends CI_Controller
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar');
+		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/courses/edit', $data);
 		$this->load->view('partials/footer');
 	}
