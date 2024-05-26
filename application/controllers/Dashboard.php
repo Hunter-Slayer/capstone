@@ -7,6 +7,8 @@ class Dashboard extends CI_Controller {
 	{
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		
 		
 		$this->checkLogin();
@@ -28,6 +30,8 @@ class Dashboard extends CI_Controller {
 		$this->load->view('admin/dashboard', $data);
 		$this->load->view('partials/footer');
 	}
+
+
 
 	public function checkLogin()
 	{

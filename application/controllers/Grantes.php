@@ -6,9 +6,12 @@ class Grantes extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['grantees'] = $this->Grant->getGrantees();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -19,10 +22,13 @@ class Grantes extends CI_Controller
 
 	public function create()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getActiveCampus();
 		$data['years'] = $this->SchoolYear->getSchoolYear();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -49,11 +55,14 @@ class Grantes extends CI_Controller
 
 	public function show($granteeId)
 	{
+		$this->checkLogin();
 		$data['student'] = $this->Grant->getGrant($granteeId);
 
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['years'] = $this->SchoolYear->getSchoolYear();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -64,11 +73,14 @@ class Grantes extends CI_Controller
 
 	public function edit($granteeId)
 	{
+		$this->checkLogin();
 		$data['student'] = $this->Grant->getGrant($granteeId);
 
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['years'] = $this->SchoolYear->getSchoolYear();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -77,6 +89,44 @@ class Grantes extends CI_Controller
 		$this->load->view('partials/footer');
 	}
 
+	public function govgrantee() {
+		$this->checkLogin();
+		
+		$userId = $this->session->userdata('user_id');
+		$data['user'] = $this->User->getUserInfo($userId);
+		$data['governments'] = $this->Grant->filterGov();
+		$data['notifications'] = $this->Notif->getNotifications();
+	
+		$this->load->view('partials/header');
+		$this->load->view('partials/admin/navbar', $data);
+		$this->load->view('partials/admin/sidebar', $data);
+		$this->load->view('admin/grantes/govgrantee', $data);
+		$this->load->view('partials/footer');
+	}
+	
+	
 
+		// Fetch private grantees
+		public function prigrantee() {
+			$this->checkLogin();
+			$userId = $this->session->userdata('user_id');
+			$data['user'] = $this->User->getUserInfo($userId);
+			$data['privates'] = $this->Grant->filterPrivate(); // Assuming method to fetch private grantees
+			$data['notifications'] = $this->Notif->getNotifications();
+
+			$this->load->view('partials/header');
+			$this->load->view('partials/admin/navbar', $data);
+			$this->load->view('partials/admin/sidebar', $data);
+			$this->load->view('admin/grantes/prigrantee', $data);
+			$this->load->view('partials/footer');
+		}
+
+	public function checkLogin()
+	{
+		if(!$this->session->userdata('logged_in')){
+			redirect('login');
+			exit();
+		}
+	}
 
 }

@@ -11,12 +11,12 @@
 		</div>
 	</div>
 
-
-	<div class="alert alert-success" id="message" style="display: none;">
-	</div>
-
 	<?php if ($this->session->flashdata('success')): ?>
 	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+	<?php endif; ?>
+
+	<?php if ($this->session->flashdata('error')): ?>
+	<div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
 	<?php endif; ?>
 
 
@@ -27,11 +27,11 @@
 			<form class="row g-3" action="<?=base_url('reports/generateReport') ?>" method="POST">
 				<h5 class="card-title mx-2">Students Data</h5>
 
-				<div class="row">
+				<div class="row mb-2">
 					<!-- address -->
 					<div class="col-md-4">
 
-						<label class="form-label">Province<span class="text-danger">*</span></label>
+						<label class="form-label">Province</label>
 						<select class="form-select" name="province_id" id="province_id">
 							<option selected value="">Choose from below</option>
 							<?php foreach ($provinces as $province): ?>
@@ -41,7 +41,7 @@
 					</div>
 
 					<div class="col-md-4">
-						<label class="form-label">Municipality<span class="text-danger">*</span></label>
+						<label class="form-label">Municipality</label>
 						<select class="form-select" name="municipal_id" id="municipal_id">
 							<option selected value="">Choose from below</option>
 
@@ -49,7 +49,7 @@
 					</div>
 
 					<div class="col-md-4">
-						<label class="form-label">Barangay<span class="text-danger">*</span></label>
+						<label class="form-label">Barangay</label>
 						<select class="form-select" name="barangay_id" id="barangay_id">
 							<option selected value="">Choose from below</option>
 
@@ -59,10 +59,10 @@
 				</div>
 
 
-				<div class="row">
+				<div class="row mb-2">
 					<!-- Campus -->
 					<div class="col-md-4">
-						<label class="form-label">Campus<span class="text-danger">*</span></label>
+						<label class="form-label">Campus</label>
 						<select class="form-select" name="campus_id" id="campus_id">
 							<option selected value="">Choose from below</option>
 							<?php foreach ($campus as $camp): ?>
@@ -73,14 +73,14 @@
 
 
 					<div class="col-md-8">
-						<label class="form-label">Course<span class="text-danger">*</span></label>
+						<label class="form-label">Course</label>
 						<select id="course_id" class="form-select" name="course_id">
 							<option selected value="">Choose from below</option>
 						</select>
 					</div>
 				</div>
 
-				<div class="row">
+				<div class="row mb-2">
 					<div class="col-md-4">
 						<label class="form-label">Semester<span class="text-danger">*</span></label>
 
@@ -107,7 +107,7 @@
 				<div class="row mt-2">
 					<!-- sCholarship -->
 					<div class="col-md-4">
-						<label class="form-label">Scholarship Type<span class="text-danger">*</span></label>
+						<label class="form-label">Scholarship Type</label>
 						<select class="form-select" name="type2" id="type2">
 							<option value="">Choose from below</option>
 							<option value="0">Government</option>
@@ -116,7 +116,7 @@
 					</div>
 
 					<div class="col-md-8">
-						<label class="form-label">Scholarship<span class="text-danger">*</span></label>
+						<label class="form-label">Scholarship</label>
 						<select class="form-select" name="scholarship_id2" id="scholarship_id2">
 							<option value="">Choose from below</option>
 						</select>

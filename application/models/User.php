@@ -67,7 +67,7 @@ class User extends CI_Model {
 
 	public function getUserInfo($userId)
 	{
-		$sql = "SELECT users.id, users.name AS usersFullName, user_types.name as userTypeName, campus.name as campusName, users.type_id
+		$sql = "SELECT users.id, users.name AS usersFullName, user_types.name as userTypeName, campus.name as campusName, users.type_id, users.campus_id as campusType
 				FROM users
 				LEFT JOIN user_types ON users.type_id = user_types.id
 				LEFT JOIN campus ON users.campus_id = campus.id
@@ -94,6 +94,21 @@ class User extends CI_Model {
 			return $query->row_array();
 		} else {
 			return null;
+		}
+	}
+
+	public function getUserDetails($userId) {
+		$sql = "SELECT users.type_id AS userType, users.campus_id
+				FROM users
+				WHERE users.id = ?";
+	
+		$query = $this->db->query($sql, array($userId));
+	
+		if ($query->num_rows() > 0) {
+			$userData = $query->row_array();
+			return $userData; // Return the user data array directly
+		} else {
+			return null; // Or return an empty array if no user found
 		}
 	}
 }

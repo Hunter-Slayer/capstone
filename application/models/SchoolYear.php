@@ -2,7 +2,6 @@
 
 class SchoolYear extends CI_Model
 {
-
 	public function __construct()
 	{
 		$this->load->database();
@@ -15,4 +14,8 @@ class SchoolYear extends CI_Model
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
+
+	public function insertSchoolYear($data) {
+        return $this->db->insert('years', $data);
+    }
 }

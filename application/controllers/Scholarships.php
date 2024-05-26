@@ -6,13 +6,16 @@ class Scholarships extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['scholarships'] = $this->Scholarship->getScholarships();
 
 		// filter
-		$data['totalGovScholar'] = $this->Scholarship->totalGovernmentScholarships(0);
-		$data['totalPrivateScholar'] = $this->Scholarship->totalPrivateScholarships(1);
+		$data['totalGovScholar'] = $this->Scholarship->totalGovernmentScholarships();
+		$data['totalPrivateScholar'] = $this->Scholarship->totalPrivateScholarships();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		
 		$this->load->view('partials/header');
@@ -24,12 +27,81 @@ class Scholarships extends CI_Controller
 
 	public function create()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/scholar/create');
+		$this->load->view('partials/footer');
+	}
+
+	public function government()
+	{
+		$this->checkLogin();
+		$userId = $this->session->userdata('user_id');
+		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+		$data['govs'] = $this->Scholarship->getGovernment();
+
+
+
+		$this->load->view('partials/header');
+		$this->load->view('partials/admin/navbar', $data);
+		$this->load->view('partials/admin/sidebar', $data);
+		$this->load->view('admin/scholar/government', $data);
+		$this->load->view('partials/footer');
+	}
+	public function governmentActive()
+	{
+		$this->checkLogin();
+		$userId = $this->session->userdata('user_id');
+		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+		$data['actives'] = $this->Scholarship->getActiveGovernment();
+
+
+
+		$this->load->view('partials/header');
+		$this->load->view('partials/admin/navbar', $data);
+		$this->load->view('partials/admin/sidebar', $data);
+		$this->load->view('admin/scholar/activegov',$data);
+		$this->load->view('partials/footer');
+	}
+	public function private()
+	{
+		$this->checkLogin();
+		$userId = $this->session->userdata('user_id');
+		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+		$data['privates'] = $this->Scholarship->getPrivate();
+
+
+
+		$this->load->view('partials/header');
+		$this->load->view('partials/admin/navbar', $data);
+		$this->load->view('partials/admin/sidebar', $data);
+		$this->load->view('admin/scholar/private',$data);
+		$this->load->view('partials/footer');
+	}
+	public function privateActive()
+	{
+		$this->checkLogin();
+		$userId = $this->session->userdata('user_id');
+		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+		$data['actives'] = $this->Scholarship->getActivePrivate();
+
+
+
+		$this->load->view('partials/header');
+		$this->load->view('partials/admin/navbar', $data);
+		$this->load->view('partials/admin/sidebar', $data);
+		$this->load->view('admin/scholar/activepri', $data);
 		$this->load->view('partials/footer');
 	}
 
@@ -50,8 +122,8 @@ class Scholarships extends CI_Controller
             // Prepare audit trail data
             $audit_data = [
                 'user_id' => $user_id,
-                'action' => 'Added Scholarship',
-                'data' => json_encode(['Added: ' => $data['name']]),
+                'action' => 'Added new Scholarship',
+                'data' => ('Added: ' . $data['name']),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -69,9 +141,12 @@ class Scholarships extends CI_Controller
 
 	public function show($scholarId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['scholar'] = $this->Scholarship->getScholar($scholarId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -81,9 +156,12 @@ class Scholarships extends CI_Controller
 	}
 	public function edit($scholarId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['scholar'] = $this->Scholarship->getScholar($scholarId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -111,7 +189,7 @@ class Scholarships extends CI_Controller
             $audit_data = [
                 'user_id' => $user_id,
                 'action' => 'Updated Scolarship',
-                'data' => json_encode(['Updated: ' => $data]),
+                'data' => ('Updated: ' . $data),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -124,6 +202,12 @@ class Scholarships extends CI_Controller
 		}
 
 	}
-
+	public function checkLogin()
+	{
+		if(!$this->session->userdata('logged_in')){
+			redirect('login');
+			exit();
+		}
+	}
 }
 

@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/scholarships') ?>" class="btn btn-primary">Back</a>
+		<button onclick="goBack()" class="btn-sm btn btn-danger">Back</button>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">

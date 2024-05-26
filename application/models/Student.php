@@ -40,8 +40,12 @@ class Student extends CI_Model
 
 	public function getStudent($studentId)
 	{
-		$sql = "SELECT students.*, courses.id AS courseId, province.*, municipality.*, barangay.*, courses.name AS courseName
+		$sql = "SELECT students.*, courses.id AS courseId, province.*, municipality.*, barangay.*, courses.name AS courseName,
+						grantees.scholarship_id, grantees.semester, grantees.school_year, scholarship.name AS scholarshipName, scholarship.type AS typesName
 				FROM students
+
+				LEFT JOIN grantees ON grantees.student_id = students.id
+				LEFT JOIN scholarship ON scholarship.id = grantees.scholarship_id
 				LEFT JOIN province ON province.provCode = students.province_id
 				LEFT JOIN municipality ON municipality.citymunCode = students.municipal_id
 				LEFT JOIN barangay ON barangay.brgyCode = students.barangay_id
@@ -69,7 +73,7 @@ class Student extends CI_Model
 	public function insertTestData($student_data)
 	{
 		// Insert student_data into the specified table
-		$this->db->insert('studentss', $student_data);
+		$this->db->insert('students', $student_data);
 	}
 
 
@@ -77,12 +81,15 @@ class Student extends CI_Model
 	public function getStudentsReport($province_id, $municipal_id, $barangay_id, $campus_id, $course_id, $semester, $school_year, $type2, $scholarship_id2)
 {
     $sql = "SELECT students.*, grantees.*, 
+					students.student_id AS studentId,
                    province.provDesc AS province_name, 
                    municipality.citymunDesc AS municipal_name, 
                    barangay.brgyDesc AS barangay_name,
                    campus.name AS campus_name, 
-                   courses.name AS course_name
+                   courses.name AS course_name, scholarship.name AS scholarshipName, 
+				   scholarship.type AS scholarship_type
             FROM grantees
+			LEFT JOIN scholarship ON scholarship.id = grantees.scholarship_id
             LEFT JOIN students ON students.id = grantees.student_id
             LEFT JOIN campus ON campus.id = students.campus_id
             LEFT JOIN courses ON courses.id = students.course_id
@@ -93,6 +100,7 @@ class Student extends CI_Model
 
     // Add conditions based on the provided parameters
     $bindings = [];
+
     
     if ($province_id) {
         $sql .= " AND students.province_id = ?";

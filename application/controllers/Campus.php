@@ -6,9 +6,12 @@ class Campus extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getCampus();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
@@ -18,8 +21,11 @@ class Campus extends CI_Controller
 
 	public function create()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
@@ -44,7 +50,7 @@ class Campus extends CI_Controller
 			$audit_data = [
 				'user_id' => $user_id,
 				'action' => 'Added Campus',
-				'data' => json_encode(['username' => $username]), // Correctly format the data field
+				'data' => ('Username: ' . $username), // Correctly format the data field
 				'created_at' => date('Y-m-d H:i:s'),
 				'updated_at' => date('Y-m-d H:i:s')
 			];
@@ -63,9 +69,12 @@ class Campus extends CI_Controller
 
 	public function show($campusId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getSingleCampus($campusId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
@@ -76,9 +85,12 @@ class Campus extends CI_Controller
 
 	public function edit($campusId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getSingleCampus($campusId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -105,7 +117,7 @@ class Campus extends CI_Controller
             $audit_data = [
                 'user_id' => $user_id,
                 'action' => 'Updated campus',
-                'data' => json_encode(['Updated: ' => $data]),
+                'data' => ('Updated: ' . $data),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -118,6 +130,13 @@ class Campus extends CI_Controller
 	
 		redirect($_SERVER['HTTP_REFERER']);
 
+	}
+	public function checkLogin()
+	{
+		if(!$this->session->userdata('logged_in')){
+			redirect('login');
+			exit();
+		}
 	}
 
 }

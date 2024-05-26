@@ -6,10 +6,13 @@ class Users extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 
 		$data['users'] = $this->User->getUsers();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -20,10 +23,13 @@ class Users extends CI_Controller
 
 	public function create()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getActiveCampus();
 		$data['userTypes'] = $this->UserType->getUsersType();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
@@ -32,6 +38,7 @@ class Users extends CI_Controller
 	}
 	public function show($userId)
 	{
+		$this->checkLogin();
 		// Check if user is logged in
 		$loggedInUserId = $this->session->userdata('user_id');
 		if (!$loggedInUserId) {
@@ -44,6 +51,8 @@ class Users extends CI_Controller
 		$data['users'] = $this->User->getUser($userId);
 		$data['campus'] = $this->Camp->getActiveCampus();
 		$data['userTypes'] = $this->UserType->getUsersType();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -54,6 +63,7 @@ class Users extends CI_Controller
 
 		public function edit($userId)
 		{
+			$this->checkLogin();
 			// Check if user is logged in
 			$loggedInUserId = $this->session->userdata('user_id');
 			if (!$loggedInUserId) {
@@ -69,6 +79,8 @@ class Users extends CI_Controller
 			// Fetch active campuses and user types
 			$data['campus'] = $this->Camp->getActiveCampus();
 			$data['userTypes'] = $this->UserType->getUsersType();
+			$data['notifications'] = $this->Notif->getNotifications();
+
 
 			// Load views with data
 			$this->load->view('partials/header');
@@ -157,6 +169,12 @@ class Users extends CI_Controller
         }
     }
 }
-
+public function checkLogin()
+{
+	if(!$this->session->userdata('logged_in')){
+		redirect('login');
+		exit();
+	}
+}
 
 }

@@ -37,7 +37,7 @@ class Auth extends CI_Controller
 				$audit_data = [
 					'user_id' => $user['id'],
 					'action' => 'Logged in',
-					'data' => json_encode(['username' => $user['username']]), // Correctly format the data field
+					'data' => ('Username: ' . $user['username']), // Correctly format the data field
 					'created_at' => date('Y-m-d H:i:s'),
 					'updated_at' => date('Y-m-d H:i:s')
 				];
@@ -66,7 +66,7 @@ class Auth extends CI_Controller
 			$audit_data = [
 				'user_id' => $user_id,
 				'action' => 'Logged out',
-				'data' => json_encode(['username' => $username]), // Correctly format the data field
+				'data' => ('Username' . $username), // Correctly format the data field
 				'created_at' => date('Y-m-d H:i:s'),
 				'updated_at' => date('Y-m-d H:i:s')
 			];

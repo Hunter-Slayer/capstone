@@ -52,9 +52,9 @@
 
 											<td>
 												<a href="<?= site_url('admin/campus/view/' . $camp['id']) ?>"
-													class="btn-primary btn btn-sm">View</a>
+													class="btn-primary btn btn-sm text-dark">View</a>
 												<a href="<?= site_url('admin/campus/edit/' . $camp['id']) ?>"
-													class="btn-primary btn btn-sm">Edit</a>
+													class="btn-warning btn btn-sm text-dark">Edit</a>
 
 											</td>
 										</tr>

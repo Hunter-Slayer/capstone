@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/users') ?>" class="btn btn-primary">Back</a>
+		<a href="<?= base_url('admin/users') ?>" class="btn btn-danger">Back</a>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">

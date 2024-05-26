@@ -50,9 +50,9 @@
 										<td><?= htmlspecialchars($user['campusName'] ?? 'All Campus') ?></td>
 										<td>
 											<a href="<?= base_url('admin/users/view/' . $user['userId']) ?>"
-												class="btn-primary btn btn-sm">View</a>
+												class="btn-primary btn btn-sm text-dark">View</a>
 											<a href="<?= base_url('admin/users/edit/' . $user['userId']) ?>"
-												class="btn-primary btn btn-sm">Edit</a>
+												class="btn-warning btn btn-sm text-dark">Edit</a>
 										</td>
 									</tr>
 									<?php endforeach; ?>

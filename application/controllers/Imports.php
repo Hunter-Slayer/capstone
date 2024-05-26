@@ -12,8 +12,11 @@ class Imports extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
@@ -94,8 +97,8 @@ class Imports extends CI_Controller
 				// Prepare audit trail data
 				$audit_data = [
 					'user_id' => $user_id,
-					'action' => 'Import data',
-					'data' => json_encode(['Imported Students data ']),
+					'action' => 'Imported Students data',
+					'data' => ('Imported Students data by ' . $username),
 					'created_at' => date('Y-m-d H:i:s'),
 					'updated_at' => date('Y-m-d H:i:s')
 				];
@@ -113,5 +116,12 @@ class Imports extends CI_Controller
 	}
 
 
+}
+public function checkLogin()
+{
+	if(!$this->session->userdata('logged_in')){
+		redirect('login');
+		exit();
+	}
 }
 }

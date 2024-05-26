@@ -21,65 +21,48 @@
 
 	</div>
 
-
 	<section class="section">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="card">
 					<div class="card-body">
-
-
 						<h5 class="card-title">Students Data</h5>
-
 						<div class="table-responsive">
-
 							<table class="table datatable table-striped table-hover" id="filteredStudentTable">
 								<thead>
 									<tr>
-
 										<th>Student ID</th>
 										<th>FullName</th>
-										<th>Last Name</th>
+										<th>Year Level</th>
 										<th>Course</th>
 										<th>Campus</th>
 										<th>Status</th>
 										<th>Manage</th>
 									</tr>
 								</thead>
-
-
-
-
 								<tbody>
 									<?php foreach($students as $student): ?>
 									<tr>
 										<td><?= $student['student_id'] ?></td>
 										<td><?= $student['last_name'] .' '. $student['first_name'] ?></td>
-										<td><?= $student['last_name'] ?></td>
+										<td><?= $student['year_level'] ?></td>
 										<td><?= $student['courseName'] ?></td>
-
 										<td><?= $student['campusName'] ?></td>
 										<td><?= ($student['status'] == 0) ? 'Active' : 'Inactive' ?></td>
 
 										<td>
 											<a href="<?= site_url('admin/student/view/' . $student['studentId']) ?>"
-												class="btn-primary btn btn-sm">View</a>
+												class="btn-info btn btn-sm text-dark m-1 fw-semibold">View</a>
 											<a href="<?= site_url('admin/student/edit/' . $student['studentId']) ?>"
-												class="btn-primary btn btn-sm">Edit</a>
+												class="btn-primary btn btn-sm text-dark m-1 fw-semibold">Edit</a>
 											<a href="<?= site_url('admin/student/grante/' . $student['studentId']) ?>"
-												class="btn-primary btn btn-sm">Grantee</a>
-
+												class="btn-warning btn btn-sm text-dark m-1 fw-semibold">Grantee</a>
 										</td>
 									</tr>
 									<?php endforeach; ?>
 								</tbody>
-
-
-
 							</table>
 						</div>
-
-
 					</div>
 				</div>
 			</div>

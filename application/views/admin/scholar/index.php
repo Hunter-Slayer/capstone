@@ -45,8 +45,8 @@
 
 								<tbody>
 									<?php foreach ($scholarships as $scholar): ?>
-										<tr>
-											<?php
+									<tr>
+										<?php
 											if (!function_exists('limit_words')) {
 												function limit_words($string, $word_limit)
 												{
@@ -56,21 +56,21 @@
 											}
 											?>
 
-											<td><?= limit_words($scholar['name'], 5) ?></td>
+										<td><?= limit_words($scholar['name'], 5) ?></td>
 
 
-											<td><?= $scholar['code'] ?></td>
-											<td><?= ($scholar['type'] == 0) ? 'Government' : 'Private' ?></td>
-											<td><?= ($scholar['status'] == 0) ? 'Active' : 'Inactive' ?></td>
+										<td><?= $scholar['code'] ?></td>
+										<td><?= ($scholar['type'] == 0) ? 'Government' : 'Private' ?></td>
+										<td><?= ($scholar['status'] == 0) ? 'Active' : 'Inactive' ?></td>
 
-											<td>
-												<a href="<?= site_url('admin/scholarship/view/' . $scholar['id']) ?>"
-													class="btn-primary btn btn-sm">View</a>
-												<a href="<?= site_url('admin/scholarship/edit/' . $scholar['id']) ?>"
-													class="btn-primary btn btn-sm">Edit</a>
+										<td>
+											<a href="<?= site_url('admin/scholarship/view/' . $scholar['id']) ?>"
+												class="btn-primary btn btn-sm text-dark">View</a>
+											<a href="<?= site_url('admin/scholarship/edit/' . $scholar['id']) ?>"
+												class="btn-warning btn btn-sm">Edit</a>
 
-											</td>
-										</tr>
+										</td>
+									</tr>
 									<?php endforeach; ?>
 								</tbody>
 

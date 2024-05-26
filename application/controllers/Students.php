@@ -6,8 +6,10 @@ class Students extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
 
 		$data['students'] = $this->Student->getStudents();
 
@@ -24,8 +26,10 @@ class Students extends CI_Controller
 
 	public function edit($studentId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
 
 		$data['student'] = $this->Student->getStudent($studentId);
 		$data = $this->address($data);
@@ -43,9 +47,12 @@ class Students extends CI_Controller
 
 	public function create()
 	{
+		$this->checkLogin();
 		$data = array();
 		$data = $this->address($data);
 		$userId = $this->session->userdata('user_id');
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		$data['user'] = $this->User->getUserInfo($userId);
 
 		// courses
@@ -61,12 +68,13 @@ class Students extends CI_Controller
 
 	public function show($studentId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 
 		$data['student'] = $this->Student->getStudent($studentId);
 		$data['provinces'] = $this->Address->getProvince();
-
+		$data['notifications'] = $this->Notif->getNotifications();
 
 		$data['campus'] = $this->Camp->getActiveCampus();
 
@@ -84,7 +92,9 @@ class Students extends CI_Controller
 	{
 
         $this->form_validation->set_rules('student_id', 'Student ID', 'required|is_unique[students.student_id]');
+		$this->form_validation->set_rules('classification', 'Student Type', 'required');
 
+		
         if ($this->form_validation->run() == FALSE) {
     		$this->create();
         } else {
@@ -106,6 +116,9 @@ class Students extends CI_Controller
 			'course_id' => $this->input->post('course_id'),
 			'father_name' => $this->input->post('father_name'),
 			'mother_name' => $this->input->post('mother_name'),
+			'classification' => $this->input->post('classification'),
+			'previous_school' => $this->input->post('previous_school'),
+			'previous_school_year' => $this->input->post('previous_school_year'),
 		);
 	
 		$this->Student->insert_student($data);
@@ -117,8 +130,8 @@ class Students extends CI_Controller
             // Prepare audit trail data
             $audit_data = [
                 'user_id' => $user_id,
-                'action' => 'Added Student',
-                'data' => json_encode(['Added '. $data['last_name']. ', '. $data['first_name']]),
+                'action' => 'Added new Student',
+                'data' => ('Added '. $data['last_name']. ', '. $data['first_name']),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -128,7 +141,7 @@ class Students extends CI_Controller
 
 		$this->session->set_flashdata('success', 'Student data Added successfully.');
 
-		redirect('students');
+		redirect('admin/student/create');
 		}
 		}
 	}
@@ -153,6 +166,9 @@ class Students extends CI_Controller
 			'course_id' => $this->input->post('course_id'),
 			'father_name' => $this->input->post('father_name'),
 			'mother_name' => $this->input->post('mother_name'),
+			'classification' => $this->input->post('classification'),
+			'previous_school' => $this->input->post('previous_school'),
+			'previous_school_year' => $this->input->post('previous_school_year'),
 		);
 	
 		$this->Student->updateStudent($studentId, $data);
@@ -164,7 +180,7 @@ class Students extends CI_Controller
 			$audit_data = [
 				'user_id' => $user_id,
 				'action' => 'Updated Student',
-				'data' => json_encode(['Updated: '. $data]),
+				'data' => (['Updated: '. $data]),
 				'created_at' => date('Y-m-d H:i:s'),
 				'updated_at' => date('Y-m-d H:i:s')
 			];
@@ -223,12 +239,15 @@ class Students extends CI_Controller
 	// add Grantee
 	public function grantee($studentId)
 	{
+		$this->checkLogin();
 		$data['student'] = $this->Student->getStudent($studentId);
 		$data['campus'] = $this->Camp->getActiveCampus();
 		$data['years'] = $this->SchoolYear->getSchoolYear();
 
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -284,8 +303,39 @@ class Students extends CI_Controller
 		}
 	
 		if ($inserted) {
+			$userId = $this->session->userdata('user_id');
+        $userData = $this->User->getUserInfo($userId); // Get user data
+        $userType = $userData['type_id'];
+        $userTypeName = $userData['userTypeName'];
+        $campusName = $userData['campusName'];
+
+        // Determine the notification message
+        if ($userType == 1 || $userType == 2) {
+            $notificationMessage = $userTypeName;
+        } else {
+            $notificationMessage = $userTypeName . ' - ' . $campusName;
+        }
+
+        // Prepare notification data
+        $notificationData = array(
+            'user_id' => $userId,
+            'data' => $notificationMessage,
+            'read_at' => null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        );
+
+		        // Insert notification data
+				$this->Notif->insertNotification($notificationData);
+
+
+
+
+
+
 			// Redirect back with a success message
 			$this->session->set_flashdata('success', 'Scholarship(s) added successfully.');
+			
 		} else {
 			// Redirect back with an error message
 			$this->session->set_flashdata('error', 'Failed to add scholarship(s). Please ensure all required fields are filled.');
@@ -318,7 +368,13 @@ class Students extends CI_Controller
 	}
 	
 
-
+	public function checkLogin()
+	{
+		if(!$this->session->userdata('logged_in')){
+			redirect('login');
+			exit();
+		}
+	}
 }
 
 

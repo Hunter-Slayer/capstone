@@ -9,6 +9,16 @@
 <script src="<?= base_url('assets/vendor/php-email-form/validate.js') ?>"></script>
 
 <script src="<?= base_url('assets/js/main.js') ?>"></script>
+<script>
+function goBack() {
+  var prevUrl = document.referrer;
+  if (prevUrl) {
+    window.location.href = prevUrl;
+  } else {
+    // Handle case where referrer is not available (e.g., user accessed directly)
+  }
+}
+</script>
 
 </body>
 </html>

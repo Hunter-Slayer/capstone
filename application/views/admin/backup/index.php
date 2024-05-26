@@ -15,38 +15,38 @@
 	</div>
 
 	<?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
-<?php endif; ?>
+	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+	<?php endif; ?>
 
 
 	<div class="card col-md-6">
 		<div class="card-body">
 
 
-		<form class="row my-3" action="<?= base_url('backup/backupData') ?>" method="POST">
-
-		
-			<p>
-                            Creating regular backups of your database is crucial for data integrity and system recovery.
-                            In case of unexpected events or data loss, having a recent backup ensures that you can
-                            restore your system to a known, stable state. Please follow the steps below to perform a
-                            system backup:
-                        </p>
-                        <p>
-
-                            <li>Click the "Perform System Backup" button below.</li>
-                            <li>Wait for the backup process to complete.</li>
-                            <li>A notification will be show once complete.</li>
-                        </p>
+			<form class="row my-3" action="<?= base_url('backup/backupData') ?>" method="POST">
 
 
-                        <div class="d-flex justify-content-end mx-2 ">
+				<p>
+					Creating regular backups of your database is crucial for data integrity and system recovery.
+					In case of unexpected events or data loss, having a recent backup ensures that you can
+					restore your system to a known, stable state. Please follow the steps below to perform a
+					system backup:
+				</p>
+				<p>
 
-                            <button name="backup" class="btn btn-primary btn-md mx-2">
-                                Backup
-                            </button>
+					<li>Click the "Perform System Backup" button below.</li>
+					<li>Wait for the backup process to complete.</li>
+					<li>A notification will be show once complete.</li>
+				</p>
 
-                        </div>
+
+				<div class="d-flex justify-content-end mx-2 ">
+
+					<button name="backup" class="btn btn-primary btn-md mx-2">
+						Backup
+					</button>
+
+				</div>
 
 
 			</form>

@@ -6,9 +6,12 @@ class Courses extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['courses'] = $this->Course->getCourses();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 		
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -19,9 +22,12 @@ class Courses extends CI_Controller
 
 	public function create()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['campus'] = $this->Camp->getActiveCampus();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -47,7 +53,7 @@ class Courses extends CI_Controller
             $audit_data = [
                 'user_id' => $user_id,
                 'action' => 'Added Courses',
-                'data' => json_encode(['Added: ' => $data]),
+                'data' => ('Added: ' . $data),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -65,10 +71,13 @@ class Courses extends CI_Controller
 
 	public function show($courseId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['course'] = $this->Course->getCourse($courseId);
 		$data['campus'] = $this->Camp->getActiveCampus();
+		$data['notifications'] = $this->Notif->getNotifications();
+
 
 
 		$this->load->view('partials/header');
@@ -80,10 +89,13 @@ class Courses extends CI_Controller
 
 	public function edit($courseId)
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['course'] = $this->Course->getCourse($courseId);
 		$data['campus'] = $this->Camp->getActiveCampus();
+		$data['notifications'] = $this->Notif->getNotifications();
+		
 
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
@@ -101,12 +113,36 @@ class Courses extends CI_Controller
 			'status' => $this->input->post('status'),
 		);
 
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+
+		if ($user_id) {
+            // Prepare audit trail data
+            $audit_data = [
+                'user_id' => $user_id,
+                'action' => 'Updated Courses',
+                'data' => ('Updated: ' . $data),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ];
+
+            // Insert audit trail record
+            $this->Audit->insert_audit_trail($audit_data);
+        }
+		
 		$this->Course->updateCourse($courseId, $data);
 	
 		$this->session->set_flashdata('success', 'Course data updated successfully.');
 	
 		redirect($_SERVER['HTTP_REFERER']);
 
+	}
+	public function checkLogin()
+	{
+		if(!$this->session->userdata('logged_in')){
+			redirect('login');
+			exit();
+		}
 	}
 
 }

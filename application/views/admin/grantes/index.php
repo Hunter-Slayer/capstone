@@ -16,7 +16,7 @@ function limitWords($string, $word_limit) {
     <h1>Grantees</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.php">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
         <li class="breadcrumb-item">Grantees</li>
       </ol>
     </nav>
@@ -25,6 +25,7 @@ function limitWords($string, $word_limit) {
 
   <div class="d-flex justify-content-end my-2">
     <a href="<?=base_url('admin/student/create') ?>" class="btn btn-primary mx-2">Add</a>
+		<a href="<?= base_url('grantes')?>" class="btn btn-sm btn-warning mx-2">Reset</a>
 
   </div>
 
@@ -48,6 +49,7 @@ function limitWords($string, $word_limit) {
                   <th>Name</th>
                   <th>Campus</th>
                   <th>Scholarship</th>
+                  <th>Scholarship Type</th>
                   <th>Status</th>
                   <th>Manage</th>
                 </tr>
@@ -59,15 +61,13 @@ function limitWords($string, $word_limit) {
         <td><?= $grantee['studentRefference'] ?></td>
         <td><?= $grantee['fullName'] ?></td>
         <td><?= $grantee['campusName'] ?></td>
-				<td><?= limitWords($grantee['scholarName'], 4) ?></td>
-
-			      
+				<td><?= limitWords($grantee['scholarName'], 5) ?></td>
+        <td><?= ($grantee['studentType'] == 0 ) ? 'Government' : 'Private' ?></td>
 				<td><?= ($grantee['studentStatus'] == 0) ? 'Active' : 'Inactive' ?></td>
-
+			
 				<td>
-				<a href="<?= site_url('admin/grante/view/' . $grantee['granteeId']) ?>" class="btn-primary btn btn-sm">View</a>
-				<a href="<?= site_url('admin/grante/edit/' . $grantee['granteeId']) ?>" class="btn-primary btn btn-sm">Edit</a>
-
+				<a href="<?= site_url('admin/grante/view/' . $grantee['granteeId']) ?>" class="btn-primary btn btn-sm text-dark">View</a>
+				<!-- <a href="<?= site_url('admin/grante/edit/' . $grantee['granteeId']) ?>" class="btn-warning btn btn-sm text-dark">Edit</a> -->
 				</td>
     </tr>
     <?php endforeach; ?>

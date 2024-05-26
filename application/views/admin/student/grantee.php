@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/students') ?>" class="btn btn-primary">Back</a>
+		<a href="<?= base_url('admin/students') ?>" class="btn btn-danger">Back</a>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">
@@ -20,6 +20,10 @@
 	<?php if ($this->session->flashdata('success')) : ?>
 	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
 	<?php endif; ?>
+	<?php if ($this->session->flashdata('error')) : ?>
+	<div class="alert alert-danger"><?= $this->session->flashdata('error') ?></div>
+	<?php endif; ?>
+
 
 
 	<div class="card">
@@ -30,145 +34,148 @@
 
 			<div class="row g-3">
 
-				<div class="col-md-6">
-					<label class="form-label">Student Name<span class="text-red"></span><span
-							class="text-danger">*</span></label>
-					<input disabled class="form-control" type="text" required name="name"
-						value="<?= $student['first_name'] . ' ' . $student['middle_name'] . ' ' . $student['last_name'] ?>" />
+				<div class="row">
+					<div class="col-md-4">
+						<label class="form-label">Student Name<span class="text-red"></span><span
+								class="text-danger">*</span></label>
+						<input disabled class="form-control" type="text" required name="name"
+							value="<?= $student['first_name'] . ' ' . $student['middle_name'] . ' ' . $student['last_name'] ?>" />
 
+					</div>
+
+
+					<div class="col-md-2">
+						<label class="form-label">Year Level<span class="text-danger">*</span></label>
+						<select disabled class="form-select" name="year_level">
+							<option value="" <?= ($student['year_level'] == '') ? 'selected' : '' ?>>Choose from below
+							</option>
+							<option value="1" <?= ($student['year_level'] == '1') ? 'selected' : '' ?>>1</option>
+							<option value="2" <?= ($student['year_level'] == '2') ? 'selected' : '' ?>>2</option>
+							<option value="3" <?= ($student['year_level'] == '3') ? 'selected' : '' ?>>3</option>
+							<option value="4" <?= ($student['year_level'] == '4') ? 'selected' : '' ?>>4</option>
+							<option value="5" <?= ($student['year_level'] == '5') ? 'selected' : '' ?>>5</option>
+							<option value="6" <?= ($student['year_level'] == '6') ? 'selected' : '' ?>>6</option>
+						</select>
+					</div>
 				</div>
 
 
-				<div class="col-md-6">
-					<label class="form-label">Course<span class="text-red"></span><span
-							class="text-danger">*</span></label>
+				<div class="row">
+					<div class="col-md-4">
+						<label class="form-label">Campus<span class="text-danger">*</span></label>
+						<select disabled class="form-select" name="campus_id" required id="campus_id">
+							<option value="" <?= ($student['campus_id'] == '') ? 'selected' : '' ?>>Choose from below
+							</option>
+							<?php foreach ($campus as $camp) : ?>
+							<option value="<?= $camp['id'] ?>"
+								<?= ($camp['id'] == $student['campus_id']) ? 'selected' : '' ?>>
+								<?= $camp['name'] ?>
+							</option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+					<div class="col-md-6">
+						<label class="form-label">Course<span class="text-red"></span><span
+								class="text-danger">*</span></label>
 
-					<input disabled class="form-control" type="text" required name="abbrevation"
-						value="<?= $student['courseName'] ?>" />
+						<input disabled class="form-control" type="text" required name="abbrevation"
+							value="<?= $student['courseName'] ?>" />
+					</div>
 
 				</div>
+				<div class="row">
+					<h5 class="card-title mx-2">Add Scholarship</h5>
 
-				<div class="col-md-6">
-					<label class="form-label">Year Level<span class="text-danger">*</span></label>
-					<select disabled class="form-select" name="year_level">
-						<option value="" <?= ($student['year_level'] == '') ? 'selected' : '' ?>>Choose from below
-						</option>
-						<option value="1" <?= ($student['year_level'] == '1') ? 'selected' : '' ?>>1</option>
-						<option value="2" <?= ($student['year_level'] == '2') ? 'selected' : '' ?>>2</option>
-						<option value="3" <?= ($student['year_level'] == '3') ? 'selected' : '' ?>>3</option>
-						<option value="4" <?= ($student['year_level'] == '4') ? 'selected' : '' ?>>4</option>
-						<option value="5" <?= ($student['year_level'] == '5') ? 'selected' : '' ?>>5</option>
-					</select>
+					<form class=" row" action="<?= base_url('students/addGrantee/' . $student['id']) ?>" method="POST">
+						<h6 class="text-muted mb-2">Scholarship (1)</h6>
+
+						<div class="row mb-2">
+							<div class="col-md-6">
+								<label class="form-label">Semester<span class="text-danger">*</span></label>
+								<select class="form-select" name="semester1">
+									<option value="">Choose from below</option>
+									<option value="1" <?= ($student['semester'] == '1') ? 'selected' : '' ?>>1st</option>
+									<option value="2" <?= ($student['semester'] == '2') ? 'selected' : '' ?>>2nd</option>
+								</select>
+
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">School Year<span class="text-danger">*</span></label>
+								<select class="form-select" name="school_year1">
+									<option value="" <?= ($student['school_year'] == '') ? 'selected' : '' ?>>Choose from below</option>
+									<?php foreach ($years as $year) : ?>
+									<option value="<?= $year['school_year'] ?>" <?= ($year['school_year'] == $student['school_year']) ? 'selected' : '' ?> > <?= $year['school_year'] ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">Scholarship Type<span class="text-danger">*</span></label>
+								<select class="form-select" name="type1" id="type1">
+									<option value="">Choose from below</option>
+									<option value="0" <?= ($student['typesName'] == '0') ? 'selected' : '' ?>>Government</option>
+									<option value="1" <?= ($student['typesName'] == '1') ? 'selected' : '' ?>>Private</option>
+								</select>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">Scholarship<span class="text-danger">*</span></label>
+								<select class="form-select" name="scholarship_id1" id="scholarship_id1">
+									<option value="" <?= ($student['scholarshipName']) ? 'selected' : '' ?> >Choose from below</option>
+								</select>
+							</div>
+						</div>
+
+
+						<hr class="m-3">
+						<h6 class="text-muted mb-2">Scholarship (2)</h6>
+
+						<div class="row mb-2">
+							<div class="col-md-6">
+								<label class="form-label">Semester<span class="text-danger">*</span></label>
+
+								<select class="form-select" name="semester2">
+									<option value="">Choose from below</option>
+									<option value="1">1st</option>
+									<option value="2">2nd</option>
+								</select>
+
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">School Year<span class="text-danger">*</span></label>
+								<select class="form-select" name="school_year2">
+									<option value="">Choose from below</option>
+									<?php foreach ($years as $year) : ?>
+									<option value="<?= $year['school_year'] ?>"> <?= $year['school_year'] ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">Scholarship Type<span class="text-danger">*</span></label>
+								<select class="form-select" name="type2" id="type2">
+									<option value="">Choose from below</option>
+									<option value="0">Government</option>
+									<option value="1">Private</option>
+								</select>
+							</div>
+
+							<div class="col-md-6">
+								<label class="form-label">Scholarship<span class="text-danger">*</span></label>
+								<select class="form-select" name="scholarship_id2" id="scholarship_id2">
+									<option value="">Choose from below</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="col-12 d-flex justify-content-start align-items-center">
+							<button class="btn btn-primary mt-4 ml-2" type="submit" name="submit">Add
+								Scholarship</button>
+						</div>
+					</form>
 				</div>
-
-
-				<div class="col-md-6">
-					<label class="form-label">Campus<span class="text-danger">*</span></label>
-					<select disabled class="form-select" name="campus_id" required id="campus_id">
-						<option value="" <?= ($student['campus_id'] == '') ? 'selected' : '' ?>>Choose from below
-						</option>
-						<?php foreach ($campus as $camp) : ?>
-						<option value="<?= $camp['id'] ?>"
-							<?= ($camp['id'] == $student['campus_id']) ? 'selected' : '' ?>>
-							<?= $camp['name'] ?>
-						</option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-
-
-
-				<h5 class="card-title mx-2">Add Scholarship</h5>
-
-				<form class=" row" action="<?= base_url('students/addGrantee/' . $student['id']) ?>" method="POST">
-					<h6>First Scholarship</h6>
-
-					<div class="row mb-2">
-						<div class="col-md-6">
-							<label class="form-label">Semester<span class="text-danger">*</span></label>
-							<select class="form-select" name="semester1">
-								<option value="">Choose from below</option>
-								<option value="1">1st</option>
-								<option value="2">2nd</option>
-							</select>
-
-						</div>
-						<div class="col-md-6">
-							<label class="form-label">School Year<span class="text-danger">*</span></label>
-							<select class="form-select" name="school_year1">
-								<option value="">Choose from below</option>
-								<?php foreach ($years as $year) : ?>
-								<option value="<?= $year['school_year'] ?>">  <?= $year['school_year'] ?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<label class="form-label">Scholarship Type<span class="text-danger">*</span></label>
-							<select class="form-select" name="type1" id="type1">
-								<option value="">Choose from below</option>
-								<option value="0">Government</option>
-								<option value="1">Private</option>
-							</select>
-						</div>
-						<div class="col-md-6">
-							<label class="form-label">Scholarship<span class="text-danger">*</span></label>
-							<select class="form-select" name="scholarship_id1" id="scholarship_id1">
-								<option value="">Choose from below</option>
-							</select>
-						</div>
-					</div>
-
-
-					<hr class="m-3">
-					<h6>Second Scholarship</h6>
-
-					<div class="row mb-2">
-						<div class="col-md-6">
-							<label class="form-label">Semester<span class="text-danger">*</span></label>
-
-							<select class="form-select" name="semester2" >
-								<option value="">Choose from below</option>
-								<option value="1">1st</option>
-								<option value="2">2nd</option>
-							</select>
-
-						</div>
-						<div class="col-md-6">
-							<label class="form-label">School Year<span class="text-danger">*</span></label>
-							<select class="form-select" name="school_year2" >
-							<option value="">Choose from below</option>
-								<?php foreach ($years as $year) : ?>
-								<option value="<?= $year['school_year'] ?>">  <?= $year['school_year'] ?></option>
-								<?php endforeach; ?>
-							</select>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-md-6">
-							<label class="form-label">Scholarship Type<span class="text-danger">*</span></label>
-							<select class="form-select" name="type2" id="type2">
-								<option value="">Choose from below</option>
-								<option value="0">Government</option>
-								<option value="1">Private</option>
-							</select>
-						</div>
-
-						<div class="col-md-6">
-							<label class="form-label">Scholarship<span class="text-danger">*</span></label>
-							<select class="form-select" name="scholarship_id2" id="scholarship_id2">
-								<option value="">Choose from below</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="col-12 d-flex justify-content-end align-items-center">
-						<button class="btn btn-primary mt-2 ml-2" type="submit" name="submit">Add Scholarship</button>
-					</div>
-				</form>
-
 
 			</div>
 		</div>

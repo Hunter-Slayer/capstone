@@ -8,13 +8,24 @@ class Backup extends CI_Controller
 
 	public function index()
 	{
+		$this->checkLogin();
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
+		$data['notifications'] = $this->Notif->getNotifications();
+
+
 		$this->load->view('partials/header');
 		$this->load->view('partials/admin/navbar', $data);
 		$this->load->view('partials/admin/sidebar', $data);
 		$this->load->view('admin/backup/index');
 		$this->load->view('partials/footer');
+	}
+	public function checkLogin()
+	{
+		if(!$this->session->userdata('logged_in')){
+			redirect('login');
+			exit();
+		}
 	}
 	
 	public function backupData()
@@ -36,11 +47,6 @@ class Backup extends CI_Controller
 	
 		// Convert the SQL content to plain text
 		$sql = htmlspecialchars_decode($sql);
-	
-		// Set headers to force download the backup file
-		$this->load->helper('download');
-		force_download('backup.sql', $sql);
-
 		$user_id = $this->session->userdata('user_id');
 		$username = $this->session->userdata('username');
 
@@ -48,8 +54,8 @@ class Backup extends CI_Controller
 			// Prepare audit trail data
 			$audit_data = [
 				'user_id' => $user_id,
-				'action' => 'Backed Database',
-				'data' => json_encode(['username' => $username]), // Correctly format the data field
+				'action' => 'Backed up Database',
+				'data' => 'Username: ' . $username, 
 				'created_at' => date('Y-m-d H:i:s'),
 				'updated_at' => date('Y-m-d H:i:s')
 			];
@@ -58,6 +64,11 @@ class Backup extends CI_Controller
             // Insert audit trail record
             $this->Audit->insert_audit_trail($audit_data);
         }
+		// Set headers to force download the backup file
+		$this->load->helper('download');
+		force_download('backup.sql', $sql);
+
+
 	}
 	
 	

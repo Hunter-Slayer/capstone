@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/campus') ?>" class="btn btn-primary">Back</a>
+		<a href="<?= base_url('admin/campus') ?>" class="btn btn-danger">Back</a>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">
@@ -51,7 +51,7 @@
 
 				
 
-				<div class="col-12 d-flex justify-content-end align-items-center">
+				<div class="col-12 d-flex justify-content-start align-items-center">
 
 					<button class="btn btn-primary mt-2 ml-2" type="submit" name="submit">Add Campus</button>
 				</div>

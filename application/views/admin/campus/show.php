@@ -11,15 +11,15 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/campus') ?>" class="btn btn-primary">Back</a>
+		<a href="<?= base_url('admin/campus') ?>" class="btn btn-danger">Back</a>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">
 	</div>
 
 	<?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
-<?php endif; ?>
+	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+	<?php endif; ?>
 
 
 	<div class="card">
@@ -34,31 +34,33 @@
 					<label class="form-label">Campus<span class="text-red"></span><span
 							class="text-danger">*</span></label>
 					<div class="input-group">
-						<input disabled class="form-control" type="text" required name="description" value="<?=$campus['description'] ?>" />
+						<input disabled class="form-control" type="text" required name="description"
+							value="<?=$campus['description'] ?>" />
 					</div>
 				</div>
-			
-			
+
+
 				<div class="col-md-6">
 					<label class="form-label">Abbrevation<span class="text-red"></span><span
 							class="text-danger">*</span></label>
 					<div class="input-group">
-						<input disabled class="form-control" type="text" required name="name"  value="<?=$campus['name'] ?>"  />
+						<input disabled class="form-control" type="text" required name="name"
+							value="<?=$campus['name'] ?>" />
 					</div>
 				</div>
 
 				<div class="col-md-6">
 
-<label class="form-label">Status<span class="text-danger">*</span></label>
-<select disabled class="form-select" name="status" required>
-	<option selected value="">Choose from below</option>
-	<option value="0" <?= ($campus['status'] == 0) ? 'selected' : '' ?>>Active</option>
-	<option value="1" <?= ($campus['status'] == 1) ? 'selected' : '' ?>>Inactive</option>
-</select>
-</div>
+					<label class="form-label">Status<span class="text-danger">*</span></label>
+					<select disabled class="form-select" name="status" required>
+						<option selected value="">Choose from below</option>
+						<option value="0" <?= ($campus['status'] == 0) ? 'selected' : '' ?>>Active</option>
+						<option value="1" <?= ($campus['status'] == 1) ? 'selected' : '' ?>>Inactive</option>
+					</select>
+				</div>
 
 
-		
+
 
 			</form>
 

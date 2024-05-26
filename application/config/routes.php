@@ -8,7 +8,6 @@ $route['translate_uri_dashes'] = FALSE;
 
 // Admin Dashaboard
 $route['admin/dashboard'] = 'Dashboard';
-
 //Students Area
 $route['admin/students'] = 'Students';
 $route['admin/student/create'] = 'Students/create';
@@ -29,6 +28,11 @@ $route['admin/scholarship/view/(:any)'] = 'Scholarships/show/$1';
 //edit
 $route['admin/scholarship/edit/(:any)'] = 'Scholarships/edit/$1';
 
+$route['admin/scholar/government'] = 'Scholarships/government';
+$route['admin/scholar/private'] = 'Scholarships/private';
+
+$route['admin/scholar/activegov'] = 'Scholarships/governmentActive';
+$route['admin/scholar/activepri'] = 'Scholarships/privateActive';
 
 // Campus Are
 $route['admin/campus'] = 'Campus';
@@ -60,6 +64,9 @@ $route['admin/grante/view/(:any)'] = 'Grantes/show/$1';
 //edit
 $route['admin/grante/edit/(:any)'] = 'Grantes/edit/$1';
 //route
+$route['admin/grantes/govgrantee'] = 'Grantes/govgrantee';
+$route['admin/grantes/prigrantee'] = 'Grantes/prigrantee';
+
 
 
 
@@ -86,3 +93,7 @@ $route['admin/users/create'] = 'Users/create';
 $route['admin/users/view/(:any)'] = 'Users/show/$1';
 //edit
 $route['admin/users/edit/(:any)'] = 'Users/edit/$1';
+
+// school
+$route['admin/schoolyear/index'] = 'School/index';
+$route['admin/audit/index'] = 'AuditController/index';

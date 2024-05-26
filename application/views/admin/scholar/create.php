@@ -11,15 +11,15 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end my-2">
-		<a href="<?= base_url('admin/scholarships') ?>" class="btn btn-primary">Back</a>
+		<<button onclick="goBack()" class="btn-sm btn btn-danger">Back</button>
 	</div>
 
 	<div class="alert alert-success" id="message" style="display: none;">
 	</div>
 
 	<?php if ($this->session->flashdata('success')): ?>
-    <div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
-<?php endif; ?>
+	<div class="alert alert-success"><?= $this->session->flashdata('success') ?></div>
+	<?php endif; ?>
 
 
 	<div class="card">
@@ -45,7 +45,7 @@
 						<input class="form-control" type="text" required name="code" />
 					</div>
 				</div>
-			
+
 				<div class="col-md-6">
 					<label class="form-label">Type<span class="text-danger">*</span></label>
 					<select class="form-select" name="type" required>
@@ -56,7 +56,7 @@
 				</div>
 
 
-				
+
 
 				<div class="col-12 d-flex justify-content-end align-items-center">
 
