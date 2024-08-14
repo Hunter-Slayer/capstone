@@ -1,3 +1,16 @@
+
+<?php
+function limitWords($string, $word_limit) {
+    $words = explode(" ", $string);
+    if (count($words) > $word_limit) {
+        return implode(" ", array_slice($words, 0, $word_limit)) . '...';
+    } else {
+        return $string;
+    }
+}
+
+?>
+
 <main id="main" class="main">
 
 	<div class="pagetitle">
@@ -46,18 +59,37 @@
 										<td><?= $student['student_id'] ?></td>
 										<td><?= $student['last_name'] .' '. $student['first_name'] ?></td>
 										<td><?= $student['year_level'] ?></td>
-										<td><?= $student['courseName'] ?></td>
+										<td><?= limitWords($student['courseName'], 4) ?></td>
 										<td><?= $student['campusName'] ?></td>
-										<td><?= ($student['status'] == 0) ? 'Active' : 'Inactive' ?></td>
-
-										<td>
-											<a href="<?= site_url('admin/student/view/' . $student['studentId']) ?>"
-												class="btn-info btn btn-sm text-dark m-1 fw-semibold">View</a>
-											<a href="<?= site_url('admin/student/edit/' . $student['studentId']) ?>"
-												class="btn-primary btn btn-sm text-dark m-1 fw-semibold">Edit</a>
-											<a href="<?= site_url('admin/student/grante/' . $student['studentId']) ?>"
-												class="btn-warning btn btn-sm text-dark m-1 fw-semibold">Grantee</a>
+										<td class="text-center">
+											<?php if ($student['status'] == 0): ?>
+											<span class="badge bg-success rounded-pill">Active</span>
+											<?php else: ?>
+											<span class="badge bg-danger rounded-pill">Inactive</span>
+											<?php endif; ?>
 										</td>
+										<td>
+											<div class="dropdown text-center">
+												<button class="btn btn-link p-0 border-0" type="button"
+													id="dropdownMenuButton" data-bs-toggle="dropdown"
+													aria-expanded="false">
+													<i
+														class="bi bi-three-dots-vertical text-decoration-none fw-bold"></i>
+												</button>
+												<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+													<li><a class="dropdown-item fw-bold"
+															href="<?= site_url('admin/student/view/' . $student['studentId']) ?>">
+															<i class="bi bi-eye"></i> View</a></li>
+													<li><a class="dropdown-item fw-bold"
+															href="<?= site_url('admin/student/edit/' . $student['studentId']) ?>">
+															<i class="bi bi-pencil"></i> Edit</a></li>
+													<li><a class="dropdown-item fw-bold"
+															href="<?= site_url('admin/student/grante/' . $student['studentId']) ?>">
+															<i class="bi bi-mortarboard"></i> Grantee</a></li>
+												</ul>
+											</div>
+										</td>
+
 									</tr>
 									<?php endforeach; ?>
 								</tbody>

@@ -11,7 +11,6 @@ class Notif extends CI_Model {
 	public function getGroupedNotifications($userId)
     {
         $this->db->select('data, COUNT(*) as count');
-        $this->db->where('user_id', $userId);
 		$this->db->where('DATE(created_at)', Carbon::today()->toDateString());
         $this->db->group_by('data');
         $query = $this->db->get('notifications');

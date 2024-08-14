@@ -18,7 +18,10 @@ class Auth extends CI_Controller
 		$this->form_validation->set_rules('password', 'Password', 'required');
 
 		if ($this->form_validation->run() == FALSE) {
-			$this->login();
+			$this->session->set_flashdata('error', 'All fields are required');
+			redirect('login');
+			// $this->login();
+
 		} else {
 			// Validation passed, process the login
 			$username = $this->input->post('username');

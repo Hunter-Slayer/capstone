@@ -1,6 +1,5 @@
 <?php
 
-use DB;
 
 class Scholarship extends CI_Model {
 	public function __construct()
@@ -228,45 +227,38 @@ class Scholarship extends CI_Model {
 	}
 
 
-	public function getCampusData() {
-		$selectedScholarshipType = $this->input->post('type1'); // Access form data
-		$selectedYear = $this->input->post('school_year');
-	  
-		$userId = $this->session->userdata('user_id'); // Get user ID from session
-		$campusId = $this->session->userdata('campus_id');
-	  
-		// Filter based on user's campus
-		$this->db->where('students.campus', $campusId); // Replace 'userId' with appropriate field for user's campus
-	  
-		// Build the query with joins, filtering, and grouping
-		$studentsCount = $this->db->select([
-		  'scholarship_name.codeName AS label',
-		  D# Import the 'DB' module if it exists
-from module_name import DB
-
-# Or define the 'DB' type if it doesn't exist
-class DB:
-    # Add DB class implementation here
-
-# Use the 'DB' type as needed in your codeB::raw('COUNT(*) AS data')
-		])
-		->from('grantees')
-		->join('scholarship_name', 'grantees.scholarship_name', '=', 'scholarship_name.id')
-		->join('students', 'grantees.student_id', '=', 'students.id')
-		->where('grantees.scholarship_type', $selectedScholarshipType)
-		->where('grantees.school_year', $selectedYear)
-		->group_by('scholarship_name.codeName')
-		->get();
-	  
-		// Handle potential query errors (optional)
-		if ($studentsCount->num_rows() === 0) {
-		  return []; // Return empty array if no results found (optional)
+	public function getCampusData($type1 = null, $school_year = null) {
+		$userId = $this->session->userdata('user_id');
+		$role = $this->User->getUserRole($userId);
+	
+		$sql = "SELECT scholarship.code AS label, COUNT(grantees.student_id) AS student_count
+				FROM grantees
+				LEFT JOIN students ON students.id = grantees.student_id
+				LEFT JOIN campus ON students.campus_id = campus.id
+				LEFT JOIN scholarship ON grantees.scholarship_id = scholarship.id
+				WHERE (? = 0 OR campus.id = ?)";
+		
+		if ($type1) {
+			$sql .= " AND scholarship.type = " . $this->db->escape($type1);
 		}
-	  
-		$results = $studentsCount->result_array();
-	  
-		return json_encode($results); // Convert to JSON for response
-	  }
+	
+		if ($school_year) {
+			$sql .= " AND grantees.school_year = " . $this->db->escape($school_year);
+		}
+	
+		$sql .= " GROUP BY scholarship.code";
+	
+		$query = $this->db->query($sql, array($role, $role));
+	
+		// if (!$query) {
+		// 	$error = $this->db->error();
+		// 	return array('error' => $error['message']);
+		// }
+	
+		return $query->result();
+	}
+	
+	
 	  
 
 

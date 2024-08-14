@@ -36,33 +36,40 @@ function limitWords($string, $word_limit) {
                             <table class="table datatable table-striped table-hover" id="filteredStudentTable">
                                 <thead>
                                     <tr>
-                                        <th>Student ID</th>
-                                        <th>Name</th>
-                                        <th>Campus</th>
-                                        <th>Scholarship</th>
-                                        <th>Scholarship Type</th>
-                                        <th>Status</th>
-                                        <th>Manage</th>
+									<th>Student ID</th>
+										<th>Name</th>
+										<th hidden>Address</th>
+										<th hidden>Sex</th>
+										<th hidden>Civil Status</th>
+										<th hidden>Year Level</th>
+										<th>Campus</th>
+										<th>Scholarship</th>
+										<th>Scholarship Type</th>
+										<th hidden>Semester</th>
+										<th hidden>School Year</th>
+										<th>Manage</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach($governments as $government): ?>
-                                    <tr>
-                                        <td><?= $government['studentRefference'] ?></td>
-                                        <td><?= $government['fullName'] ?></td>
-                                        <td><?= $government['campusName'] ?></td>
-                                        <td>
-                                            <span data-toggle="tooltip" data-placement="top" title="<?= $government['scholarName'] ?>">
-                                                <?= limitWords($government['scholarName'], 5) ?>
-                                            </span>
-                                        </td>
-										<td><?= ($government['studentType'] == 0) ? 'Government' : 'Private' ?></td>
-                                        <td><?= ($government['studentStatus'] == 0) ? 'Active' : 'Inactive' ?></td>
-                                        <td>
-                                            <a href="<?= site_url('admin/grante/view/' . $government['granteeId']) ?>" class="btn btn-primary btn-sm text-dark">View</a>
-                                            <a href="<?= site_url('admin/grante/edit/' . $government['granteeId']) ?>" class="btn btn-warning btn-sm text-dark">Edit</a>
-                                        </td>
-                                    </tr>
+                                   <tr>
+										<td><?= $government['studentReference'] ?></td>
+										<td><?= $government['fullName'] ?></td>
+										<td hidden><?= $government['studentAddress'] ?></td>
+										<td hidden><?= ($government['gender'] == 0 ) ? 'Male' : 'Female' ?></td>
+										<td hidden><?= ($government['civil_status'] == 0 ) ? 'Single' : 'Married' ?></td>
+										<td hidden><?= $government['year_level'] ?></td>
+										<td><?= $government['campusName'] ?></td>
+										<td><?= limitWords($government['scholarName'], 3) ?></td>
+										<td><?= ($government['studentType'] == 0 ) ? 'Government' : 'Private' ?></td>
+										<td hidden><?= $government['semester']?></td>
+										<td hidden><?= $government['school_year']?></td>
+										<td>
+											<a href="<?= site_url('admin/grante/view/' . $government['granteeId']) ?>"
+												class="btn-primary btn btn-sm text-dark">View</a>
+											<!-- <a href="<?= site_url('admin/grante/edit/' . $government['granteeId']) ?>" class="btn-warning btn btn-sm text-dark">Edit</a> -->
+										</td>
+									</tr>
                                     <?php endforeach; ?>
                                 </tbody>
                             </table>

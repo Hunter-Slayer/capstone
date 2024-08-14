@@ -48,13 +48,19 @@
 
 											<td><?= $course['name'] ?></td>
 											<td><?= $course['CampusName'] ?></td>
-											<td><?= ($course['status'] == 0) ? 'Active' : 'Inactive' ?></td>
+											<td class="text-center">
+											<?php if ($course['status'] == 0): ?>
+											<span class="badge bg-success rounded-pill">Active</span>
+											<?php else: ?>
+											<span class="badge bg-danger rounded-pill">Inactive</span>
+											<?php endif; ?>
+										</td>
 
 											<td>
 												<a href="<?= site_url('admin/courses/view/' . $course['courseId']) ?>"
-													class="btn-primary btn btn-sm">View</a>
+													class="btn-primary text-dark btn btn-sm">View</a>
 												<a href="<?= site_url('admin/courses/edit/' . $course['courseId']) ?>"
-													class="btn-primary btn btn-sm">Edit</a>
+													class="btn-warning text-dark btn btn-sm">Edit</a>
 											</td>
 										</tr>
 									<?php endforeach; ?>

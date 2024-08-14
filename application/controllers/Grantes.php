@@ -53,6 +53,8 @@ class Grantes extends CI_Controller
 		redirect($_SERVER['HTTP_REFERER']);
 	}
 
+	
+
 	public function show($granteeId)
 	{
 		$this->checkLogin();
@@ -62,6 +64,7 @@ class Grantes extends CI_Controller
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['years'] = $this->SchoolYear->getSchoolYear();
 		$data['notifications'] = $this->Notif->getNotifications();
+		$data['campuses'] = $this->Camp->getActiveCampus();
 
 		
 		$this->load->view('partials/header');
@@ -88,6 +91,7 @@ class Grantes extends CI_Controller
 		$this->load->view('admin/grantes/edit', $data);
 		$this->load->view('partials/footer');
 	}
+
 
 	public function govgrantee() {
 		$this->checkLogin();
@@ -128,5 +132,17 @@ class Grantes extends CI_Controller
 			exit();
 		}
 	}
+
+	public function delete($granteeId) {
+        $studentReference = $this->Grant->get_student_reference_by_grantee_id($granteeId);
+        if ($studentReference) {
+            $this->Student->update_status_by_reference($studentReference, 1);
+            $this->Grant->update_status($granteeId, 1);
+            $this->session->set_flashdata('message', 'Deleted successfully.');
+        } else {
+            $this->session->set_flashdata('message', 'Failed to delete.');
+        }
+        redirect('admin/grantes');
+    }
 
 }

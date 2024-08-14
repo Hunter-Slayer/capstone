@@ -47,8 +47,8 @@
 
 <style>
 	.logo-img {
-        width: 30%;
-        height: auto;
+        width: 25%;
+        height: 100%;
     }
 </style>
 
@@ -57,9 +57,9 @@
 <div class="d-flex align-items-center justify-content-between p-2">
     <a href="<?= base_url('admin/dashboard') ?>" class="logo d-flex align-items-center">
         <img class="logo-img me-2" src="<?= base_url('assets/images/updated.png') ?>" alt="DMMMSU">
-        <span class="d-none d-lg-block text-dark fw-bold fs-3">DMMMSU</span>
+        <span class="d-none d-lg-block text-white fw-bold fs-3">DMMMSU</span>
     </a>
-    <i class="bi bi-list toggle-sidebar-btn text-black fw-bolder"></i>
+    <i class="bi bi-list toggle-sidebar-btn text-white fw-bolder"></i>
 </div>
 	<!-- End Logo -->
 
@@ -84,22 +84,20 @@
 					<?php foreach ($notifications as $notification): ?>
 					<li class="notification-item">
 						<div>
-							<p><?php echo $notification['count']; ?> new grantee(s) added by
+							<p><?php echo $notification['count']; ?> new grantee(s) has been added by the
 								<?php echo $notification['data']; ?></p>
 						</div>
 					</li>
 					<?php endforeach; ?>
 				</ul>
 			</li>
-
-
 			<?php endif; ?>
 
 			<li class="nav-item dropdown pe-3">
 
 				<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
 					<span
-						class="d-none d-md-block dropdown-toggle pe-5 fs-5 text-dark"><?=$user['usersFullName'] ?></span>
+						class="d-none d-md-block dropdown-toggle pe-5 fs-5 text-white"><?=$user['usersFullName'] ?></span>
 				</a><!-- End Profile Iamge Icon -->
 
 				<ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">

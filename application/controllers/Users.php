@@ -106,7 +106,7 @@ class Users extends CI_Controller
         } else {
             // Validation successful, process the data
             $data = [
-                'name' => $this->input->post('name'),
+                'name' => $this->input->post(ucwords('name')),
                 'username' => $this->input->post('username'),
                 'email' => $this->input->post('email'),
                 'type_id' => $this->input->post('user_type'),
@@ -145,7 +145,7 @@ class Users extends CI_Controller
         $this->edit($userId);
     } else {
         $data = array(
-            'name' => $this->input->post('name'),
+            'name' => $this->input->post(ucwords('name')),
             'username' => $this->input->post('username'),
             'email' => $this->input->post('email'),
             'type_id' => $this->input->post('type_id'),

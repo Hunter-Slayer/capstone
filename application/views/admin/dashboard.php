@@ -155,142 +155,265 @@
 									</div>
 								</div>
 							</div>
+						</div>
 					</div>
-				</div>
 
 
-				<!-- Reports -->
-				<div class="col-12">
-					<div class="card">
-						<div class="card-body">
-							<h5 class="card-title">Reports</h5>
+					<!-- Reports -->
+					<div class="col-12">
+						<div class="card">
+							<div class="card-body">
+								<h5 class="card-title">Reports</h5>
 
 
-							<div class="row mb-3">
-								<div class="col-md-3">
-									<select class="form-select" name="type1" id="type1" required>
-										<option value="">Scholarship Type</option>
-										<option value="0">Government</option>
-										<option value="1">Private</option>
-									</select>
+								<div class="row mb-3">
+									<div class="col-md-3">
+										<label for="type1">Scholarship Type</label>
+										<select class="form-select" name="type1" id="type1" required>
+											<option value="">Choose below....</option>
+											<option value="0">Government</option>
+											<option value="1">Private</option>
+										</select>
+									</div>
+									<?php if (in_array($user['type_id'], [1, 2])): ?>
+									<div class="col-md-3" id="scholarship_container">
+										<label for="scholarship_id1">Recipient</label>
+										<select class="form-select" name="scholarship_id1" id="scholarship_id1"
+											required>
+											<option value="">All</option>
+										</select>
+									</div>
+									<?php endif; ?>
+									<div class="col-md-3">
+										<label for="school_year">School year</label>
+										<select class="form-control" name="school_year" required id="school_year">
+											<option selected value="">All</option>
+											<?php foreach ($years as $year) : ?>
+											<option value="<?= $year['school_year'] ?>">
+												<?= $year['school_year'] ?>
+											</option>
+											<?php endforeach; ?>
+										</select>
+									</div>
 								</div>
-								<?php if ( $user['type_id'] == 1 || $user['type_id'] == 2 ): ?>
-								<div class="col-md-3">
-									<select class="form-select" name="scholarship_id1" id="scholarship_id1" required>
-										<option value="">Scholarships</option>
-									</select>
-								</div>
-								<?php endif; ?>
 
-
-								<div class="col-md-3">
-									<select class="form-control" name="school_year" required id="school_year">
-										<option selected value="">School Year</option>
-										<?php foreach ($years as $year) : ?>
-										<option value="<?= $year['school_year'] ?>">
-											<?= $year['school_year'] ?>
-										</option>
-										<?php endforeach; ?>
-									</select>
-								</div>
+								<canvas id="barChart" style="max-height: 400px;"></canvas>
 							</div>
-
-							<canvas id="barChart" style="max-height: 400px;"></canvas>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		</div>
-		</div>
 	</section>
 </main>
 
+<?php if ($user['type_id'] == 1 || $user['type_id'] == 2): ?>
+	<script>
+    let chartInstance;
+    let allCampuses = []; // Array to store all campus names
 
+    function fetchChartData() {
+        var scholarship_id = $('#scholarship_id1').val();
+        var school_year = $('#school_year').val();
+        var selectedSourcesName = $('#scholarship_id1 option:selected').text(); // Get the selected source name
+
+        $.ajax({
+            url: "<?= base_url('Dashboard/getCampusStudentData') ?>",
+            method: "GET",
+            data: {
+                scholarship_id: scholarship_id,
+                school_year: school_year
+            },
+            success: function (data) {
+                try {
+                    var response = JSON.parse(data);
+                    var labels = [];
+                    var counts = [];
+
+                    // Extract labels (campus names) and counts from the response
+                    response.forEach(function (item) {
+                        labels.push(item.campus_name);
+                        counts.push(item.student_count);
+                    });
+
+                    // If allCampuses is empty, initialize it with the current labels
+                    if (allCampuses.length === 0) {
+                        allCampuses = labels.slice(); // Copy labels array
+                    }
+
+                    if (chartInstance) {
+                        chartInstance.destroy();
+                    }
+
+                    var label = selectedSourcesName + ' / ' + school_year; // Customize this based on your requirement
+
+                    // Chart configuration
+                    var chartConfig = {
+                        type: 'bar',
+                        data: {
+                            labels: allCampuses, // Use allCampuses as fixed labels
+                            datasets: [{
+                                label: 'Student Count',
+                                data: counts,
+                                backgroundColor: [
+                                    'maroon',
+                                    'green',
+                                    'gray',
+                                    'blue',
+                                    // ... (more colors if needed)
+                                ],
+                                borderColor: [
+                                    'maroon',
+                                    'green',
+                                    'gray',
+                                    'blue',
+                                    // ... (more colors if needed)
+                                ],
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: label // Set the chart title
+                                },
+                                legend: {
+                                    display: false
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    };
+
+                    // Create the chart instance
+                    chartInstance = new Chart(document.querySelector('#barChart'), chartConfig);
+                } catch (error) {
+                    console.error('Error parsing data:', error);
+                    // Handle parsing error
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching chart data:', error);
+                // Handle AJAX error
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('#scholarship_id1, #school_year').change(fetchChartData);
+        fetchChartData(); // Fetch initial data without filters
+    });
+</script>
+
+<?php endif; ?>
+
+<?php if ($user['type_id'] == 3): ?>
 <script>
-	let chartInstance;
-	let allCampuses = []; // Array to store all campus names
+	$(document).ready(function () {
+		function generateRandomColor() {
+			var r = Math.floor(Math.random() * 256);
+			var g = Math.floor(Math.random() * 256);
+			var b = Math.floor(Math.random() * 256);
+			return 'rgba(' + r + ',' + g + ',' + b + ')';
+		}
 
-	function fetchChartData() {
-		var scholarship_id = $('#scholarship_id1').val();
-		var school_year = $('#school_year').val();
+		function updateChart() {
+			var type1 = $('#type1').val();
+			var school_year = $('#school_year').val();
 
-		$.ajax({
-			url: "<?= base_url('Dashboard/getCampusStudentData') ?>",
-			method: "GET",
+			$.ajax({
+				url: '<?= base_url("Dashboard/getStudents"); ?>',
+				type: 'GET',
+				data: {
+					type1: type1,
+					school_year: school_year
+				},
+				dataType: 'json',
+				success: function (response) {
+					if (response.error) {
+						console.error('Error in response:', response.error);
+						return;
+					}
+
+					console.log('Received data:', response);
+					var allLabels = [];
+					var data = [];
+
+					response.forEach(function (item) {
+						allLabels.push(item.label);
+						data.push(item.student_count);
+					});
+
+					var backgroundColors = [];
+					var borderColors = [];
+					for (var i = 0; i < data.length; i++) {
+						backgroundColors.push(generateRandomColor());
+						borderColors.push('rgb(255, 255, 255)');
+					}
+
+					myChart.data.labels = allLabels;
+					myChart.data.datasets[0].data = data;
+					myChart.data.datasets[0].backgroundColor = backgroundColors;
+					myChart.data.datasets[0].borderColor = borderColors;
+					myChart.update();
+				},
+				error: function (xhr, textStatus, errorThrown) {
+					console.error('Error in Ajax request:', textStatus, errorThrown);
+				}
+			});
+		}
+
+		var ctx = document.getElementById('barChart').getContext('2d');
+		var myChart = new Chart(ctx, {
+			type: 'bar',
 			data: {
-				scholarship_id: scholarship_id,
-				school_year: school_year
+				labels: [],
+				datasets: [{
+					label: [],
+					data: [],
+					backgroundColor: [],
+					borderColor: [],
+					borderWidth: 2
+				}]
 			},
-			success: function (data) {
-				var response = JSON.parse(data);
-				var labels = [];
-				var counts = [];
-
-				// Extract labels (campus names) and counts from the response
-				response.forEach(function (item) {
-					labels.push(item.campus_name);
-					counts.push(item.student_count);
-				});
-
-				// If allCampuses is empty, initialize it with the current labels
-				if (allCampuses.length === 0) {
-					allCampuses = labels.slice(); // Copy labels array
-				}
-
-				if (chartInstance) {
-					chartInstance.destroy();
-				}
-
-				chartInstance = new Chart(document.querySelector('#barChart'), {
-					type: 'bar',
-					data: {
-						labels: allCampuses, // Use allCampuses as fixed labels
-						datasets: [{
-							label: [],
-							data: counts,
-							backgroundColor: [
-								'maroon',
-								'green',
-								'gray',
-								'blue',
-								// ... (more colors if needed)
-							],
-							borderColor: [
-								'maroon',
-								'green',
-								'gray',
-								'blue',
-								// ... (more colors if needed)
-							],
-						}]
-					},
-					options: {
-						scales: {
-							y: {
-								beginAtZero: true
-							}
-						},
-						plugins: {
-							legend: {
-								display: false
-							}
-						},
+			options: {
+				responsive: true,
+				plugins: {
+					title: {
+						display: false,
+						text: 'Scholarship Data'
+					}
+				},
+				scales: {
+					y: {
+						beginAtZero: true,
+						min: 0,
 						ticks: {
 							stepSize: 1
 						}
 					}
-				});
+				}
 			}
 		});
-	}
 
-	$(document).ready(function () {
-		$('#scholarship_id1, #school_year').change(fetchChartData);
-		fetchChartData(); // Fetch initial data without filters
+		updateChart();
+		$('#type1, #school_year').change(updateChart);
 	});
 
 </script>
+
+
+
+<?php endif; ?>
+
 <script>
 	$(document).ready(function () {
 		// Populate scholarship options for the first scholarship type

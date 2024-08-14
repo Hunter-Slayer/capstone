@@ -30,6 +30,137 @@ $this->session->set_userdata('user_id', $user['id']);
 
 
 
+<?php
+function limitWords($string, $word_limit) {
+    $words = explode(" ", $string);
+    if (count($words) > $word_limit) {
+        return implode(" ", array_slice($words, 0, $word_limit)) . '...';
+    } else {
+        return $string;
+    }
+}
+
+?>
+
+<main id="main" class="main">
+
+	<div class="pagetitle">
+		<h1>Grantees</h1>
+		<nav>
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+				<li class="breadcrumb-item">Grantees</li>
+			</ol>
+		</nav>
+	</div>
+
+	<div class="d-flex justify-content-end my-2">
+		<a href="<?=base_url('admin/student/create') ?>" class="btn btn-primary mx-2">Add</a>
+		<a href="<?= base_url('grantes')?>" class="btn btn-sm btn-warning mx-2">Reset</a>
+	</div>
+
+	<section class="section">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Grantees Data</h5>
+						<div class="table-responsive">
+							<table class="table datatable table-striped table-hover" id="filteredStudentTable">
+								<thead>
+									<tr>
+										<th>Student ID</th>
+										<th>Name</th>
+										<th hidden>Address</th>
+										<th hidden>Sex</th>
+										<th hidden>Civil Status</th>
+										<th hidden>Year Level</th>
+										<th>Campus</th>
+										<th>Scholarship</th>
+										<th>Scholarship Type</th>
+										<th hidden>Semester</th>
+										<th hidden>School Year</th>
+										<th>Manage</th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php foreach($grantees as $grantee): ?>
+									<tr>
+										<td><?= $grantee['studentReference'] ?></td>
+										<td><?= $grantee['fullName'] ?></td>
+										<td hidden ><?= $grantee['studentAddress'] ?></td>
+										<td hidden ><?= ($grantee['gender'] == 0 ) ? 'Male' : 'Female' ?></td>
+										<td hidden ><?= ($grantee['civil_status'] == 0 ) ? 'Single' : 'Married' ?></td>
+										<td hidden ><?= $grantee['year_level'] ?></td>
+										<td><?= $grantee['campusName'] ?></td>
+										<td><?= limitWords($grantee['scholarName'], 3) ?></td>
+										<td><?= ($grantee['studentType'] == 0 ) ? 'Government' : 'Private' ?></td>
+										<td hidden><?= $grantee['semester']?></td>td
+										<td hidden><?= $grantee['school_year']?></td>
+										<td>
+											<a href="<?= site_url('admin/grante/view/' . $grantee['granteeId']) ?>"
+												class="btn-primary btn btn-sm text-dark">View</a>
+											<!-- <a href="<?= site_url('admin/grante/edit/' . $grantee['granteeId']) ?>" class="btn-warning btn btn-sm text-dark">Edit</a> -->
+										</td>
+									</tr>
+									<?php endforeach; ?>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+
+
+
+
+public function getGrantees() 
+	{
+
+		$userId = $this->session->userdata('user_id');
+		$role = $this->User->getUserRole($userId);
+		// Assuming that the campus_id for the current user is stored in a session variable or can be retrieved from the database
+		$campusId = $this->session->userdata('campus_id');
+
+		$sql = "SELECT grantees.id AS granteeId, 
+				CONCAT(students.first_name, ' ', students.last_name) AS fullName,
+				CONCAT( barangay.brgyDesc, ' ', municipality.citymunDesc, ' ', province.provDesc ) AS studentAddress,
+				grantees.*, 
+				scholarship.name AS scholarName, 
+				scholarship.id AS scholarId,
+				scholarship.type AS studentType,
+				students.id AS studentId,
+				students.student_id AS studentReference,
+				students.gender,
+				students.civil_status,
+				students.year_level,
+				campus.name AS campusName
+		FROM grantees 
+		LEFT JOIN students ON students.id = grantees.student_id
+		LEFT JOIN scholarship ON scholarship.id = grantees.scholarship_id
+		LEFT JOIN campus ON campus.id = students.campus_id
+		LEFT JOIN province ON students.province_id = province.provCode
+		LEFT JOIN municipality ON students.municipal_id = municipality.citymunCode
+		LEFT JOIN barangay ON students.barangay_id = barangay.brgyCode
+		WHERE students.campus_id = ? OR ? = 0
+		ORDER BY grantees.created_at ASC
+		";
+		
+		$query = $this->db->query($sql, array($role,$role));
+		return $query->result_array();
+	}
+
+
+
+
+
+
+
+
+
 
 			$user_id = $this->session->userdata('user_id');
 			$username = $this->session->userdata('username');

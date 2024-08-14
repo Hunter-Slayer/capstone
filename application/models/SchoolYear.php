@@ -9,7 +9,7 @@ class SchoolYear extends CI_Model
 
 	public function getSchoolYear()
 	{
-		$sql = "SELECT school_year FROM years";
+		$sql = "SELECT school_year FROM years LIMIT 6";
 
 		$query = $this->db->query($sql);
 		return $query->result_array();

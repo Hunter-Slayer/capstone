@@ -44,20 +44,26 @@
 
 								<tbody>
 									<?php foreach ($campus as $camp): ?>
-										<tr>
-											
-											<td><?= $camp['description'] ?></td>
-											<td><?= $camp['name'] ?></td>
-											<td><?= ($camp['status'] == 0) ? 'Active' : 'Inactive' ?></td>
+									<tr>
 
-											<td>
-												<a href="<?= site_url('admin/campus/view/' . $camp['id']) ?>"
-													class="btn-primary btn btn-sm text-dark">View</a>
-												<a href="<?= site_url('admin/campus/edit/' . $camp['id']) ?>"
-													class="btn-warning btn btn-sm text-dark">Edit</a>
+										<td><?= $camp['description'] ?></td>
+										<td><?= $camp['name'] ?></td>
+										<td class="text-center">
+											<?php if ($camp['status'] == 0): ?>
+											<span class="badge bg-success rounded-pill">Active</span>
+											<?php else: ?>
+											<span class="badge bg-danger rounded-pill">Inactive</span>
+											<?php endif; ?>
+										</td>
 
-											</td>
-										</tr>
+										<td>
+											<a href="<?= site_url('admin/campus/view/' . $camp['id']) ?>"
+												class="btn-primary btn btn-sm text-dark">View</a>
+											<a href="<?= site_url('admin/campus/edit/' . $camp['id']) ?>"
+												class="btn-warning btn btn-sm text-dark">Edit</a>
+
+										</td>
+									</tr>
 									<?php endforeach; ?>
 								</tbody>
 

@@ -46,8 +46,8 @@
 
 								<tbody>
 									<?php foreach ($govs as $gov): ?>
-										<tr>
-											<?php
+									<tr>
+										<?php
 											if (!function_exists('limit_words')) {
 												function limit_words($string, $word_limit)
 												{
@@ -57,21 +57,26 @@
 											}
 											?>
 
-											<td><?= limit_words($gov['name'], 5) ?></td>
+										<td><?= limit_words($gov['name'], 5) ?></td>
 
 
-											<td><?= $gov['code'] ?></td>
-											<td><?= ($gov['type'] == 0) ? 'Government' : 'Private' ?></td>
-											<td><?= ($gov['status'] == 0) ? 'Active' : 'Inactive' ?></td>
+										<td><?= $gov['code'] ?></td>
+										<td><?= ($gov['type'] == 0) ? 'Government' : 'Private' ?></td>
+										<td class="text-center">
+											<?php if ($gov['status'] == 0): ?>
+											<span class="badge bg-success rounded-pill">Active</span>
+											<?php else: ?>
+											<span class="badge bg-danger rounded-pill">Inactive</span>
+											<?php endif; ?>
+										</td>
+										<td>
+											<a href="<?= site_url('admin/scholarship/view/' . $gov['id']) ?>"
+												class="btn-primary btn btn-sm text-dark">View</a>
+											<a href="<?= site_url('admin/scholarship/edit/' . $gov['id']) ?>"
+												class="btn-warning btn btn-sm">Edit</a>
 
-											<td>
-												<a href="<?= site_url('admin/scholarship/view/' . $gov['id']) ?>"
-													class="btn-primary btn btn-sm text-dark">View</a>
-												<a href="<?= site_url('admin/scholarship/edit/' . $gov['id']) ?>"
-													class="btn-warning btn btn-sm">Edit</a>
-
-											</td>
-										</tr>
+										</td>
+									</tr>
 									<?php endforeach; ?>
 								</tbody>
 

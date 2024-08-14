@@ -38,28 +38,42 @@ class Student extends CI_Model
 
 
 
-	public function getStudent($studentId)
-	{
-		$sql = "SELECT students.*, courses.id AS courseId, province.*, municipality.*, barangay.*, courses.name AS courseName,
-						grantees.scholarship_id, grantees.semester, grantees.school_year, scholarship.name AS scholarshipName, scholarship.type AS typesName
-				FROM students
+public function getStudent($studentId)
+{
+    // Main student query
+    $sql = "SELECT students.*, courses.id AS courseId, province.*, municipality.*, barangay.*, courses.name AS courseName
+            FROM students
+            LEFT JOIN province ON province.provCode = students.province_id
+            LEFT JOIN municipality ON municipality.citymunCode = students.municipal_id
+            LEFT JOIN barangay ON barangay.brgyCode = students.barangay_id
+            LEFT JOIN courses ON courses.id = students.course_id
+            WHERE students.id = ?";
 
-				LEFT JOIN grantees ON grantees.student_id = students.id
-				LEFT JOIN scholarship ON scholarship.id = grantees.scholarship_id
-				LEFT JOIN province ON province.provCode = students.province_id
-				LEFT JOIN municipality ON municipality.citymunCode = students.municipal_id
-				LEFT JOIN barangay ON barangay.brgyCode = students.barangay_id
-				LEFT JOIN courses ON courses.id = students.course_id
-				WHERE students.id = ?";
+    $query = $this->db->query($sql, array($studentId));
 
-		$query = $this->db->query($sql, array($studentId));
+    if ($query->num_rows() > 0) {
+        $student = $query->row_array();
 
-		if ($query->num_rows() > 0) {
-			return $query->row_array();
-		} else {
-			return null;
-		}
-	}
+        // Query to get the student's scholarships
+        $scholarshipSql = "SELECT grantees.scholarship_id, grantees.semester, grantees.school_year, scholarship.name AS scholarshipName, scholarship.type AS typesName
+                           FROM grantees
+                           LEFT JOIN scholarship ON scholarship.id = grantees.scholarship_id
+                           WHERE grantees.student_id = ?";
+
+        $scholarshipQuery = $this->db->query($scholarshipSql, array($studentId));
+
+        if ($scholarshipQuery->num_rows() > 0) {
+            $student['scholarships'] = $scholarshipQuery->result_array();
+        } else {
+            $student['scholarships'] = [];
+        }
+
+        return $student;
+    } else {
+        return null;
+    }
+}
+
 
 
 
@@ -146,5 +160,27 @@ class Student extends CI_Model
     }
 }
 
+
+
+public function searchStudentById($student_id) {
+    $this->db->like('student_id', $student_id);
 	
+    $query = $this->db->get('students');
+    return $query->result_array();
+}
+
+public function getStudentById($student_id) {
+    $this->db->where('student_id', $student_id);
+    $query = $this->db->get('students');
+    return $query->row_array();
+}
+
+
+public function update_status_by_reference($studentReference, $status) {
+	$data = array('status' => $status);
+	$this->db->where('id', $studentReference);
+	return $this->db->update('students', $data);
+}
+
+
 }

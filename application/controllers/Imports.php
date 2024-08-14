@@ -60,29 +60,31 @@ class Imports extends CI_Controller
 				
 					$data = [
 						'student_id' => $data[0], 
-						'first_name' => $data[1], 
-						'middle_name' => $data[2], 
-						'last_name' => $data[3], 
-						'email' => $data[4], 
-						'gender' => $data[5], 
-						'civil_status' => $data[6], 
-						'barangay_id' => $data[7], 
-						'municipal_id' => $data[8], 
-						'province_id' => $data[9], 
-						'campus_id' => $data[10], 
-						'course_id' => $data[11], 
-						'year_level' => $data[12], 
-						'father_name' => $data[13], 
-						'mother_name' => $data[14], 
-						'contact' => $data[15], 
-						'classification' => $data[16], 
-						'previous_school' => $data[17], 
-						'previous_school_year' => $data[18], 
+						'first_name' => isset($data[1]) ? ucwords(strtolower($data[1])) : null, 
+						'last_name' => isset($data[2]) ? ucwords(strtolower($data[2])) : null, 
+						'middle_name' => isset($data[3]) ? ucwords(strtolower($data[3])) : null, 
+						'email' => isset($data[4]) ? $data[4] : null, 
+						'gender' => isset($data[5]) ? $data[5] : null, 
+						'civil_status' => isset($data[6]) ? $data[6] : null, 
+						'barangay_id' => isset($data[7]) ? $data[7] : null, 
+						'municipal_id' => isset($data[8]) ? $data[8] : null, 
+						'province_id' => isset($data[9]) ? $data[9] : null, 
+						'campus_id' => isset($data[10]) ? $data[10] : null, 
+						'course_id' => isset($data[11]) ? $data[11] : null, 
+						'year_level' => isset($data[12]) ? $data[12] : null, 
+						'father_name' => isset($data[13]) ? ucwords(strtolower($data[13])) : null, 
+						'mother_name' => isset($data[14]) ? ucwords(strtolower($data[14])) : null, 
+						'contact' => isset($data[15]) ? $data[15] : null, 
+						'classification' => isset($data[16]) ? $data[16] : null, 
+						'previous_school' => isset($data[17]) ? $data[17] : null,     
+						'previous_school_year' => isset($data[18]) ? $data[18] : null, 
 					];
+					
+					
 
 					// Check if student_id is unique
 					if ($this->Student->is_student_id_exists($data['student_id'])) {
-						$this->session->set_flashdata('fail', 'Duplicate student ID found: ' . $student_data['student_id']);
+						$this->session->set_flashdata('fail', 'Duplicate student ID found: ' . $data['student_id']);
 						redirect($_SERVER['HTTP_REFERER']);
 					}
 					

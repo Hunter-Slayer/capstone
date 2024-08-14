@@ -13,7 +13,7 @@
 
 	<div class="d-flex justify-content-end my-2">
 		<a href="<?= base_url('admin/scholarships/create') ?>" class="btn btn-primary mx-2">Add</a>
-
+		<a href="<?= base_url('admin/scholarships') ?>" class="btn btn-warning mx-2">Reset</a>
 	</div>
 
 
@@ -61,7 +61,13 @@
 
 										<td><?= $scholar['code'] ?></td>
 										<td><?= ($scholar['type'] == 0) ? 'Government' : 'Private' ?></td>
-										<td><?= ($scholar['status'] == 0) ? 'Active' : 'Inactive' ?></td>
+										<td class="text-center">
+											<?php if ($scholar['status'] == 0): ?>
+											<span class="badge bg-success rounded-pill">Active</span>
+											<?php else: ?>
+											<span class="badge bg-danger rounded-pill">Inactive</span>
+											<?php endif; ?>
+										</td>
 
 										<td>
 											<a href="<?= site_url('admin/scholarship/view/' . $scholar['id']) ?>"

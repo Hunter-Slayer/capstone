@@ -62,7 +62,13 @@
 
 										<td><?= $active['code'] ?></td>
 										<td><?= ($active['type'] == 0) ? 'Government' : 'Private' ?></td>
-										<td><?= ($active['status'] == 0) ? 'Active' : 'Inactive' ?></td>
+										<td class="text-center">
+											<?php if ($active['status'] == 0): ?>
+											<span class="badge bg-success rounded-pill">Active</span>
+											<?php else: ?>
+											<span class="badge bg-danger rounded-pill">Inactive</span>
+											<?php endif; ?>
+										</td>
 
 										<td>
 											<a href="<?= site_url('admin/scholarship/view/' . $active['id']) ?>"

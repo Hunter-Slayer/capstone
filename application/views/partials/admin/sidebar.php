@@ -39,12 +39,6 @@
 		|| $this->uri->segment(2) == 'courses') || $this->uri->segment(2) == 'schoolYear' ? 'show' : '' ?>"
 				data-bs-parent="#sidebar-nav">
 
-				<li>
-					<a href="<?= base_url('admin/audit/index') ?>"
-						class="<?= ($this->uri->segment(2) == 'audit') ? 'text-primary' : '' ?>">
-						<i class="bi bi-circle"></i><span>Audit</span>
-					</a>
-				</li>
 
 				<?php if ( $user['type_id'] == 2 ): ?>
 				<li>
@@ -81,6 +75,12 @@
 					<a href="<?= base_url('admin/scholarships') ?>"
 						class="<?= ($this->uri->segment(2) == 'scholarships') ? 'text-primary' : '' ?>">
 						<i class="bi bi-circle"></i><span>Scholarships</span>
+					</a>
+				</li>
+				<li>
+					<a href="<?= base_url('admin/audit/index') ?>"
+						class="<?= ($this->uri->segment(2) == 'audit') ? 'text-primary' : '' ?>">
+						<i class="bi bi-circle"></i><span>Transaction Log</span>
 					</a>
 				</li>
 			</ul>

@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Students extends CI_Controller
@@ -10,7 +11,6 @@ class Students extends CI_Controller
 		$userId = $this->session->userdata('user_id');
 		$data['user'] = $this->User->getUserInfo($userId);
 		$data['notifications'] = $this->Notif->getNotifications();
-
 		$data['students'] = $this->Student->getStudents();
 
 		$this->load->view('partials/header');
@@ -45,156 +45,168 @@ class Students extends CI_Controller
 		$this->load->view('partials/footer');
 	}
 
-	public function create()
-	{
-		$this->checkLogin();
-		$data = array();
-		$data = $this->address($data);
-		$userId = $this->session->userdata('user_id');
-		$data['notifications'] = $this->Notif->getNotifications();
+		public function create()
+		{
+			$this->checkLogin();
+			$data = array();
+			$data = $this->address($data);
+			$userId = $this->session->userdata('user_id');
+			$data['notifications'] = $this->Notif->getNotifications();
+			$data['user'] = $this->User->getUserInfo($userId);
 
-		$data['user'] = $this->User->getUserInfo($userId);
+			// courses
+			$data['campus'] = $this->Camp->getActiveCampus();
+			$data['courses'] = $this->Course->getActiveCourses();
 
-		// courses
-		$data['campus'] = $this->Camp->getActiveCampus();
-		$data['courses'] = $this->Course->getActiveCourses();
-
-		$this->load->view('partials/header');
-		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar', $data);
-		$this->load->view('admin/student/create', $data);
-		$this->load->view('partials/footer');
-	}
-
-	public function show($studentId)
-	{
-		$this->checkLogin();
-		$userId = $this->session->userdata('user_id');
-		$data['user'] = $this->User->getUserInfo($userId);
-
-		$data['student'] = $this->Student->getStudent($studentId);
-		$data['provinces'] = $this->Address->getProvince();
-		$data['notifications'] = $this->Notif->getNotifications();
-
-		$data['campus'] = $this->Camp->getActiveCampus();
-
-
-		$this->load->view('partials/header');
-		$this->load->view('partials/admin/navbar', $data);
-		$this->load->view('partials/admin/sidebar', $data);
-		$this->load->view('admin/student/show', $data);
-		$this->load->view('partials/footer');
-	}
-
-
-
-	public function store()
-	{
-
-        $this->form_validation->set_rules('student_id', 'Student ID', 'required|is_unique[students.student_id]');
-		$this->form_validation->set_rules('classification', 'Student Type', 'required');
-
+			$this->load->view('partials/header');
+			$this->load->view('partials/admin/navbar', $data);
+			$this->load->view('partials/admin/sidebar', $data);
+			$this->load->view('admin/student/create', $data);
+			$this->load->view('partials/footer');
+		}
 		
-        if ($this->form_validation->run() == FALSE) {
-    		$this->create();
-        } else {
-
-		$data = array(
-			'student_id' => $this->input->post('student_id'),
-			'campus_id' => $this->input->post('campus_id'),
-			'first_name' => $this->input->post('first_name'),
-			'middle_name' => $this->input->post('middle_name'),
-			'last_name' => $this->input->post('last_name'),
-			'gender' => $this->input->post('gender'),
-			'civil_status' => $this->input->post('civil_status'),
-			'email' => $this->input->post('email'),
-			'contact' => $this->input->post('contact'),
-			'province_id' => $this->input->post('province_id'),
-			'municipal_id' => $this->input->post('municipal_id'),
-			'barangay_id' => $this->input->post('barangay_id'),
-			'year_level' => $this->input->post('year_level'),
-			'course_id' => $this->input->post('course_id'),
-			'father_name' => $this->input->post('father_name'),
-			'mother_name' => $this->input->post('mother_name'),
-			'classification' => $this->input->post('classification'),
-			'previous_school' => $this->input->post('previous_school'),
-			'previous_school_year' => $this->input->post('previous_school_year'),
-		);
-	
-		$this->Student->insert_student($data);
-
-		$user_id = $this->session->userdata('user_id');
-		$username = $this->session->userdata('username');
-
-		if ($user_id) {
-            // Prepare audit trail data
-            $audit_data = [
-                'user_id' => $user_id,
-                'action' => 'Added new Student',
-                'data' => ('Added '. $data['last_name']. ', '. $data['first_name']),
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s')
-            ];
-
-            // Insert audit trail record
-            $this->Audit->insert_audit_trail($audit_data);
-
-		$this->session->set_flashdata('success', 'Student data Added successfully.');
-
-		redirect('admin/student/create');
+		public function searchStudent() {
+			$student_id = $this->input->post('student_id');
+			$result = $this->Student->searchStudentById($student_id);
+			echo json_encode($result);
 		}
+		
+		public function getStudentData() {
+			$student_id = $this->input->post('student_id');
+			$result = $this->Student->getStudentById($student_id);
+			echo json_encode($result);
+		}
+		
+
+		public function show($studentId)
+		{
+			$this->checkLogin();
+			$userId = $this->session->userdata('user_id');
+			$data['user'] = $this->User->getUserInfo($userId);
+	
+			$data['student'] = $this->Student->getStudent($studentId);
+			$data['provinces'] = $this->Address->getProvince();
+			$data['notifications'] = $this->Notif->getNotifications();
+	
+			$data['campus'] = $this->Camp->getActiveCampus();
+	
+	
+			$this->load->view('partials/header');
+			$this->load->view('partials/admin/navbar', $data);
+			$this->load->view('partials/admin/sidebar', $data);
+			$this->load->view('admin/student/show', $data);
+			$this->load->view('partials/footer');
+		}
+	
+	
+	
+		public function store()
+		{
+	
+			$this->form_validation->set_rules('student_id', 'Student ID', 'required|is_unique[students.student_id]');
+			$this->form_validation->set_rules('classification', 'Student Type', 'required');
+	
+			
+			if ($this->form_validation->run() == FALSE) {
+				$this->create();
+			} else {
+	
+			$data = array(
+				'student_id' => $this->input->post('student_id'),
+				'campus_id' => $this->input->post('campus_id'),
+				'first_name' => ucwords(strtolower($this->input->post('first_name'))),
+				'middle_name' => ucwords(strtolower($this->input->post('middle_name'))),
+				'last_name' => ucwords(strtolower($this->input->post('last_name'))),
+				'gender' => $this->input->post('gender'),
+				'civil_status' => $this->input->post('civil_status'),
+				'email' => $this->input->post('email'),
+				'contact' => $this->input->post('contact'),
+				'province_id' => $this->input->post('province_id'),
+				'municipal_id' => $this->input->post('municipal_id'),
+				'barangay_id' => $this->input->post('barangay_id'),
+				'year_level' => $this->input->post('year_level'),
+				'course_id' => $this->input->post('course_id'),
+				'father_name' => ucwords(strtolower($this->input->post('father_name'))),
+				'mother_name' => ucwords(strtolower($this->input->post('mother_name'))),
+				'classification' => $this->input->post('classification'),
+				'previous_school' => $this->input->post('previous_school'),
+				'previous_school_year' => $this->input->post('previous_school_year'),
+			);
+		
+			$this->Student->insert_student($data);
+	
+			$user_id = $this->session->userdata('user_id');
+			$username = $this->session->userdata('username');
+	
+			if ($user_id) {
+				// Prepare audit trail data
+				$audit_data = [
+					'user_id' => $user_id,
+					'action' => 'Added new Student',
+					'data' => ('Added '. $data['last_name']. ', '. $data['first_name']),
+					'created_at' => date('Y-m-d H:i:s'),
+					'updated_at' => date('Y-m-d H:i:s')
+				];
+	
+				// Insert audit trail record
+				$this->Audit->insert_audit_trail($audit_data);
+	
+			$this->session->set_flashdata('success', 'Student data Added successfully.');
+	
+			redirect('admin/student/create');
+			}
+			}
+		}
+	
+	
+		public function update($studentId)
+		{
+			$data = array(
+				'student_id' => $this->input->post('student_id'),
+				'campus_id' => $this->input->post('campus_id'),
+				'first_name' => ucwords(strtolower($this->input->post('first_name'))),
+				'middle_name' => ucwords(strtolower($this->input->post('middle_name'))),
+				'last_name' => ucwords(strtolower($this->input->post('last_name'))),
+				'gender' => $this->input->post('gender'),
+				'civil_status' => $this->input->post('civil_status'),
+				'email' => $this->input->post('email'),
+				'contact' => $this->input->post('contact'),
+				'province_id' => $this->input->post('province_id'),
+				'municipal_id' => $this->input->post('municipal_id'),
+				'barangay_id' => $this->input->post('barangay_id'),
+				'year_level' => $this->input->post('year_level'),
+				'course_id' => $this->input->post('course_id'),
+				'father_name' => ucwords(strtolower($this->input->post('father_name'))),
+				'mother_name' => ucwords(strtolower($this->input->post('mother_name'))),
+				'classification' => $this->input->post('classification'),
+				'previous_school' => $this->input->post('previous_school'),
+				'previous_school_year' => $this->input->post('previous_school_year'),
+			);
+		
+			$this->Student->updateStudent($studentId, $data);
+			$user_id = $this->session->userdata('user_id');
+			$username = $this->session->userdata('username');
+		
+			if ($user_id) {
+				// Prepare audit trail data
+				$audit_data = [
+					'user_id' => $user_id,
+					'action' => 'Updated Student',
+					'data' => (['Updated: '. $data]),
+					'created_at' => date('Y-m-d H:i:s'),
+					'updated_at' => date('Y-m-d H:i:s')
+				];
+		
+				// Insert audit trail record
+				$this->Audit->insert_audit_trail($audit_data);
+		
+			$this->session->set_flashdata('success', 'Student data updated successfully.');
+		
+			redirect('admin/student/edit/' . $studentId, 'refresh');
+		
 		}
 	}
-
-
-	public function update($studentId)
-	{
-		$data = array(
-			'student_id' => $this->input->post('student_id'),
-			'campus_id' => $this->input->post('campus_id'),
-			'first_name' => $this->input->post('first_name'),
-			'middle_name' => $this->input->post('middle_name'),
-			'last_name' => $this->input->post('last_name'),
-			'gender' => $this->input->post('gender'),
-			'civil_status' => $this->input->post('civil_status'),
-			'email' => $this->input->post('email'),
-			'contact' => $this->input->post('contact'),
-			'province_id' => $this->input->post('province_id'),
-			'municipal_id' => $this->input->post('municipal_id'),
-			'barangay_id' => $this->input->post('barangay_id'),
-			'year_level' => $this->input->post('year_level'),
-			'course_id' => $this->input->post('course_id'),
-			'father_name' => $this->input->post('father_name'),
-			'mother_name' => $this->input->post('mother_name'),
-			'classification' => $this->input->post('classification'),
-			'previous_school' => $this->input->post('previous_school'),
-			'previous_school_year' => $this->input->post('previous_school_year'),
-		);
 	
-		$this->Student->updateStudent($studentId, $data);
-		$user_id = $this->session->userdata('user_id');
-		$username = $this->session->userdata('username');
-	
-		if ($user_id) {
-			// Prepare audit trail data
-			$audit_data = [
-				'user_id' => $user_id,
-				'action' => 'Updated Student',
-				'data' => (['Updated: '. $data]),
-				'created_at' => date('Y-m-d H:i:s'),
-				'updated_at' => date('Y-m-d H:i:s')
-			];
-	
-			// Insert audit trail record
-			$this->Audit->insert_audit_trail($audit_data);
-	
-		$this->session->set_flashdata('success', 'Student data updated successfully.');
-	
-		redirect('admin/student/edit/' . $studentId, 'refresh');
-	
-	}
-}
-
 	
 	public function address($data)
 	{
@@ -303,7 +315,7 @@ class Students extends CI_Controller
 		}
 	
 		if ($inserted) {
-			$userId = $this->session->userdata('user_id');
+		$userId = $this->session->userdata('user_id');
         $userData = $this->User->getUserInfo($userId); // Get user data
         $userType = $userData['type_id'];
         $userTypeName = $userData['userTypeName'];
@@ -328,7 +340,19 @@ class Students extends CI_Controller
 		        // Insert notification data
 				$this->Notif->insertNotification($notificationData);
 
+		$user_id = $this->session->userdata('user_id');
+		$username = $this->session->userdata('username');
+		// Prepare audit trail data
+		$audit_data = [
+			'user_id' => $user_id,
+			'action' => 'Added new Grantee',
+			'data' => ('Added new Grantee'),
+			'created_at' => date('Y-m-d H:i:s'),
+			'updated_at' => date('Y-m-d H:i:s')
+		];
 
+		// Insert audit trail record
+		$this->Audit->insert_audit_trail($audit_data);
 
 
 
@@ -375,6 +399,7 @@ class Students extends CI_Controller
 			exit();
 		}
 	}
+
 }
 
 

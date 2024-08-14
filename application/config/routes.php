@@ -57,12 +57,15 @@ $route['admin/courses/edit/(:any)'] = 'Courses/edit/$1';
 // Grantess
 
 $route['admin/grantes'] = 'Grantes';
+$route['admin/grantes/delete_ajax'] = 'Grantes/delete_ajax';
+
 //create
 $route['admin/grantes/create'] = 'Grantes/create';
 //vierw
 $route['admin/grante/view/(:any)'] = 'Grantes/show/$1';
 //edit
-$route['admin/grante/edit/(:any)'] = 'Grantes/edit/$1';
+$route['admin/grante/delete/(:any)'] = 'Admin/deleteGrantee/$1';
+
 //route
 $route['admin/grantes/govgrantee'] = 'Grantes/govgrantee';
 $route['admin/grantes/prigrantee'] = 'Grantes/prigrantee';
